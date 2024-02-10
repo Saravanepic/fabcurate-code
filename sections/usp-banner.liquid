@@ -1,0 +1,72 @@
+<div class="usp-banner new_layout {{ section.settings.classname }}">
+   <div class="page-width">
+     <div class="page_row">
+       <div class="image_wrapper">
+
+          <div class="animation_image">
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Tops3.png?v=1706333915" alt="" class="img-fluid"/>
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Tops1.png?v=1706333915" alt="" class="img-fluid"/>
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Tops5.png?v=1706333915" alt="" class="img-fluid"/>
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Tops4.png?v=1706333915" alt="" class="img-fluid"/>
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Tops2.png?v=1706333915" alt="" class="img-fluid"/>
+          </div>
+
+         
+       </div>
+       <div class="content_wrapper">
+         
+          <div class="title-wrapper-with-link">
+           <h2>{{ section.settings.title }}</h2>
+          </div>
+         <p>{{ section.settings.content }}</p>
+         <a class="green_animation_btn" href="{{ section.settings.button_link }}" target="_blank">{{ section.settings.button_label }}</a>
+       </div>
+       
+     </div>
+    </div>
+</div>
+
+{% schema %}
+  {
+    "name": "USP Banner",
+    "settings": [
+       {
+            "type": "text",
+            "id": "classname",
+            "label": "Class Name"
+          },
+          {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "content",
+            "label": "Content"
+          },
+         {
+          "type": "text",
+          "id": "button_label",
+          "default": "Button label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+    ],
+    "presets": [
+    {
+      "name": "USP Banner"
+    }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

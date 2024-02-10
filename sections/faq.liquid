@@ -1,0 +1,225 @@
+<link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'section-rich-text.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+  <div class="rich-text content-container color-{{ section.settings.color_scheme }} gradient{% if section.settings.full_width %} rich-text--full-width content-container--full-width{% endif %} section-{{ section.id }}-padding">
+    {%- unless section.settings.title == blank -%}
+      <div class="title-wrapper-with-link{% if show_mobile_slider %} title-wrapper--self-padded-tablet-down{% else %} title-wrapper--self-padded-mobile{% endif %} title-wrapper--no-top-margin">
+        <h2 id="SectionHeading-{{ section.id }}" class="collection-list-title {{ section.settings.heading_size }}">{{ section.settings.title | escape }}</h2>
+  
+        {%- if section.settings.show_view_all and show_mobile_slider -%}
+          <a href="{{ routes.collections_url }}" id="ViewAll-{{ section.id }}" class="link underlined-link large-up-hide" aria-labelledby="ViewAll-{{ section.id }} SectionHeading-{{ section.id }}">{{ 'sections.collection_list.view_all' | t }}</a>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+    <div class="rich-text__wrapper rich-text__wrapper--{{ section.settings.desktop_content_position }}{% if section.settings.full_width %} page-width{% endif %}">     
+      <div class="rich-text__blocks {{ section.settings.content_alignment }}">
+        <ul class='according-list faq___inner'>
+        {%- for block in section.blocks -%}
+          <li class="links {% if forloop.index == 1 %} active{% endif %}">
+            <h4><img src="{{ block.settings.titleimg | img_url: 'master' }}">{{ block.settings.faq-title }}</h4>
+            <div>{{ block.settings.faq-content }}</div>
+          </li>
+        {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+{% if section.settings.morequestion %}
+    <div class="faq__more_question">
+      <div class="faq_more_content">
+        {{ section.settings.morequestiontext }}
+      </div>
+      <div class="faq__button">
+        <a href="{{ section.settings.morequestionurl }}">{{ section.settings.morequestionbutton }}</a>
+      </div>      
+    </div>
+  {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "faq",
+  "tag": "section",
+  "class": "section faq---section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Collections",
+      "label": "t:sections.collection-list.settings.title.label"
+    },    
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.desktop_content_position.label",
+      "info": "t:sections.rich-text.settings.desktop_content_position.info"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "t:sections.rich-text.settings.full_width.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    },
+    {
+      "type": "header",
+      "content": "More Question"
+    },
+    {
+      "type": "checkbox",
+      "id": "morequestion",
+      "default": true,
+      "label": "Show more Question?"
+    },
+    {
+       "type": "richtext",
+       "id": "morequestiontext",
+       "label": "Content"
+    },
+    {
+      "type": "text",
+      "id": "morequestionbutton",
+      "label": "Button Text"
+    },
+     {
+      "type": "url",
+      "id": "morequestionurl",
+      "label": "Link"
+    }        
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "faq",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "titleimg",
+          "label": "Title icon"
+        },
+        {
+          "type": "text",
+          "id": "faq-title",
+          "label": "Text"
+        },
+        {
+          "type": "richtext",
+          "id": "faq-content",
+          "label": "Content"
+        }        
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "faq",
+      "blocks": [
+      ]
+    }
+  ]
+}
+{% endschema %}

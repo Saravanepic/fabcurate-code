@@ -1,0 +1,152 @@
+@media all and (max-width:767px){
+  .new_layout p{
+    font-size:16px;
+    line-height:normal;
+    letter-spacing:0.6px;
+  }
+  .green_animation_btn {
+    font-size: 14px;
+    padding: 15px 40px;
+    text-transform: capitalize;
+}
+
+.green_animation_btn svg {
+    display: none;
+}
+  .page_row {
+    grid-template-columns: 1fr;
+}
+
+.new_layout h6 {
+    font-size: 20px;
+    line-height: 26px;
+}
+
+.new_layout .title-wrapper-with-link {
+    margin: 30px 0;
+}
+
+.animation_image {
+    left: 0;
+    display: none;
+}
+
+.choose-us.new_layout .page_row {
+    gap: 30px;
+}
+
+.block_wrapper {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    width: 100%;
+}
+
+.block_point {
+    padding: 30px;
+}
+
+.choose-us.new_layout .content_wrapper .title-wrapper-with-link h2:after {
+    display: none;
+}
+
+.choose-us.new_layout .title-wrapper-with-link h2 {
+    font-size: 30px!important;
+}
+
+.block_point h5 {
+    font-size: 20px;
+    margin: 15px 0;
+    line-height:26px;
+}
+
+.step_title .step_counter {
+    font-size: 16px;
+    padding: 8px 10px;
+}
+
+.step_title {
+}
+
+.step_title .step_msg {
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.step_usps {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 20px 0 60px;
+    justify-content: center;
+    align-items: center;
+}
+
+.step_usps .step_point {
+   margin: auto;
+    max-width: 90%;
+    min-width: 90%;
+    padding:20px 5px 20px 30px;
+}
+.step_usps .step_point svg {
+    width: 20px;
+    height: 20px;
+}
+.step_usps span {
+    font-size: 16px;
+}
+
+.commitment.new_layout .page_row .content_wrapper h6 {
+    font-size: 20px;
+    line-height: normal;
+}
+
+.commitment.new_layout .page_row .content_wrapper .title-wrapper-with-link h2 {
+    font-size: 40px!important;
+    line-height: 56px!important;
+}
+
+.commitment.new_layout .page_row .content_wrapper {
+    padding: 30px;
+}
+.block_point.has_benefits:after {
+    right: 0px;
+    font-size: 12px;
+    padding: 15px 30px;
+    letter-spacing: 0;
+}
+.usp-banner.new_layout {
+  padding: 30px 0 50px 0;
+}
+  .green_animation_btn {
+    font-size: 14px;
+    padding: 15px 40px;
+    text-transform: capitalize;
+}
+
+.green_animation_btn svg {
+    display: none;
+}
+
+.intro-block.new_layout .page_row {
+    gap: 0;
+  padding-top: 50px;
+}
+
+.easy_steps.new_layout {
+    margin: 20px;
+}
+
+.usp-banner.new_layout .page_row {
+    gap: 0;
+    padding: 40px 0;
+}
+  .steps_block.step_width .slider_point img {
+    max-height: 150px;
+}
+  .style_color img {
+    min-width: 250px;
+    min-height: 250px;
+}
+  .slider_normal {
+    padding: 40px 20px 20px;
+}
+}

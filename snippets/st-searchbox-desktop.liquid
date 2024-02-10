@@ -1,0 +1,69 @@
+<div class="st-search-bar st-for-desktop">
+  <svg
+    class="st-search-icon icon icon-search"
+    height="1.8rem"
+    width="1.8rem"
+    aria-hidden="true"
+    focusable="false"
+    role="presentation"
+  >
+      <use href="#icon-search">
+    </use>
+  </svg>
+  <input
+    class="field__input"
+    type="text"
+    name="s"
+    placeholder="{{ 'general.search.search' | t }}"
+    value=""
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+  >
+  <span class="input-close-btn"></span>
+</div>
+
+<style>
+  body.searchtap main#MainContent {
+    opacity: 0!important;
+    visibility: hidden!important;
+    margin: 0!important;
+    padding: 0!important;
+    height: 0!important;
+    min-height: 0!important;
+    overflow: hidden!important;
+}
+
+body.searchtap .custom-stickey-header {
+    position: relative !important;
+}
+  .st-search-bar.st-for-desktop {
+    border: 1px solid #dde4a3;
+    width: 100%;
+  }
+  .st-search-bar input.field__input {
+    padding: 10px 35px;
+    width: 100%;
+    background: transparent;
+    height: 43px;
+  }
+  svg.st-search-icon.icon.icon-search {
+    position: absolute;
+    margin-top: 15px;
+    margin-left: 10px;
+  }
+  .st-search-bar input.field__input::placeholder {
+    opacity: 1;
+  }
+  @media (max-width: 834px) {
+    .st-search-bar.st-for-desktop {
+      display: none !important;
+    }
+  }
+
+  @media (min-width: 835px) {
+    .st-search-bar.st-for-desktop .input-close-btn {
+      height: 48px !important;
+    }
+  }
+</style>

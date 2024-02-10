@@ -1,0 +1,215 @@
+.search-output .st-bottom-card
+{
+  background:#fff !important;
+}
+.search-output .st-img-container .product-label
+{
+  display:none;
+}
+.search-output .st-bottom-card .st-title-box .st-product-title a
+{
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  padding-right: 2rem;
+  text-align: left;
+  color: #375a59;
+  text-decoration: none !important;
+}
+.search-output .st-bottom-card .st-title-box .st-product-title
+{
+  width:100% !important;
+  min-height: unset !important;
+}
+.search-output .st-bottom-card .st-products .st-wrap-price
+{
+  min-height: unset !important;
+}
+.search-output .st-bottom-card .st-swap-elements .st-price .cbb-currency-flag
+{
+  display:none !important;
+}
+.search-output .st-bottom-card .st-title-box .card--stock
+{
+  display:none;
+  width:0% !important;
+}
+.search-output .st-bottom-card .st-swap-elements .product-form__buttons
+{
+  display:none;
+  width:0;
+}
+.search-output .st-bottom-card .st-swap-elements .st-price
+{
+  width:100%;
+  text-align:left;
+  display:flex;
+}
+.search-output .st-bottom-card .st-swap-elements .st-price .st-wcpbc-price
+{
+  margin-right:1rem;
+}
+.search-output .st-bottom-card .st-swap-elements
+{
+  justify-content: flex-start !important;
+}
+.search-output .badge-is
+{
+  color: #9daa5a !important;
+  font-size: 14px;
+}
+.search__input.field__input {
+  padding-right: 9.8rem;
+}
+
+.search__button {
+  right: var(--inputs-border-width);
+  top: var(--inputs-border-width);
+}
+
+.reset__button {
+  right: calc(var(--inputs-border-width) + 4.4rem);
+  top: var(--inputs-border-width);
+}
+
+.reset__button:not(:focus-visible)::after {
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  display: block;
+  height: calc(100% - 1.6rem);
+  content: '';
+  position: absolute;
+  right: 0;
+}
+
+.reset__button:not(:focus)::after {
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  display: block;
+  height: calc(100% - 1.8rem);
+  content: '';
+  position: absolute;
+  right: 0;
+}
+
+.search__button:focus-visible,
+.reset__button:focus-visible {
+  background-color: rgb(var(--color-background));
+  z-index: 4;
+}
+
+.search__button:focus,
+.reset__button:focus {
+  background-color: rgb(var(--color-background));
+  z-index: 4;
+}
+
+.search__button:not(:focus-visible):not(.focused),
+.reset__button:not(:focus-visible):not(.focused) {
+  box-shadow: inherit;
+  background-color: inherit;
+}
+
+.search__button:hover .icon,
+.reset__button:hover .icon {
+  transform: scale(1.07);
+}
+
+.search__button .icon {
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+.reset__button .icon.icon-close {
+  height: 1.8rem;
+  width: 1.8rem;
+  stroke-width: 0.1rem;
+}
+
+/* Remove extra spacing for search inputs in Safari */
+input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+@media screen and (max-width: 767px) {
+  .search-output .st-product .st-col-md-4
+  {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-bottom: 30px;
+  }
+  .search-output .st-product .st-card
+  {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  .search-output .st-bottom-card
+  {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+  .search-output .st-product .st-card .st-img-container a img
+  {
+    width: 99%;
+    position: absolute;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    display: block;
+  }
+  
+  .search-output .st-bottom-card .st-title-box .st-product-title a
+  {
+    font-size:14px;
+    padding-right: 0;
+  }
+  .search-output .st-bottom-card .st-swap-elements .st-price
+  {
+    flex-wrap: wrap;
+  }
+  .search-output .st-bottom-card .st-swap-elements .st-price .st-wcpbc-price
+  {
+    display:flex;
+  }
+  .search-output ins .currency-converter-amount-box .currency-converter-amount *
+  {
+    font-size:13px !important;
+    font-weight:600;
+  }
+  .search-output del .currency-converter-amount-box .currency-converter-amount *
+  {
+    font-size:12px !important;
+    font-weight:400;
+  }
+  .search-output .badge-is
+  {
+    font-size:10px;
+  }
+  .search-output a.st-loop-product
+  {
+    position: relative;
+    width: 100%;
+    display: block;
+    padding-bottom: 125%;
+    margin-bottom: 10px;
+  }
+  .search-output .st-img-container
+  {
+    padding-bottom: 0 !important;
+    display: block;
+    width: 100%;
+  }
+  .search-output .st-product
+  {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .search-output .st-product .st-row
+  {
+    margin-right: 0;
+    margin-left: 0;
+  }
+  #searchModal
+  {
+    padding:0 !important;
+  }
+}

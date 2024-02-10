@@ -1,0 +1,252 @@
+<link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'section-rich-text.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+  <div class="rich-text content-container color-{{ section.settings.color_scheme }} gradient{% if section.settings.full_width %} rich-text--full-width content-container--full-width{% endif %} section-{{ section.id }}-padding">
+    <div class="rich-text__wrapper rich-text__wrapper--{{ section.settings.desktop_content_position }}{% if section.settings.full_width %} page-width{% endif %}">
+      <div class="rich-text__blocks {{ section.settings.content_alignment }}">
+             <h2 class="rich-text__heading rte {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>
+                {{ section.settings.heading | replace: 'p>', 'span>' }}
+              </h2>
+              <p class="rich-text__caption {{ block.settings.text_style }} {{ block.settings.text_style }}--{{ block.settings.text_size }}" {{ block.shopify_attributes }}>
+                {{ section.settings.caption | escape }}
+              </p>
+          <style>
+        {%- for block in section.blocks -%}
+          .{{ block.settings.heading  | remove: ' ' }} .{{ block.settings.heading  | remove: ' ' }}{display:block !important;}
+        {%- endfor -%}  
+          </style>
+        {% capture material %}
+        
+        {% endcapture %}
+        {%- for block in section.blocks -%}
+<script>
+
+  function  {{ block.settings.heading | handle | replace: '-', '_' }}(event) {
+  event.preventDefault();
+  var href = event.currentTarget.getAttribute('href')
+  //window.location='/collections/all?tab-group-fab=on&filter.p.tag={{ block.settings.heading | remove: ' ' }}' + href;
+   window.location="/search?q={{ block.settings.heading | replace: ' ', '+' }}+" + href;
+}
+</script>  
+        {%- endfor -%}
+        <div class="color_material_wrapper">
+            <div class="color_material_wrapper__inner active">
+              <h4>Select Material</h4>
+              <div class="color_material_wrapper___flex material-w" id="material-i">
+                {%- for block in section.blocks -%}
+                    <div class="inner---element {% if forloop.first %} active{% endif %}" >
+                      <img src="{{ block.settings.image | img_url: 'master' }}" id="c-{{ block.settings.heading | remove: ' ' }}">
+                      {{ block.settings.heading }}
+                    </div>
+                {%- endfor -%}
+             </div>
+            </div>
+            <div class="color_material_wrapper__inner">
+              <h4>Select Color</h4>
+              <div class="color_material_wrapper___flex color-w {%- for block in section.blocks -%}{% if forloop.index == 1 %} {{ block.settings.heading  | remove: ' ' }}{% endif %}{% endfor %}" id="color-i">
+                {%- for block in section.blocks -%}
+                  {% assign colors = block.settings.colors | split: ' | ' %}
+                  {% for color in colors %}
+                    {% assign colorpng = color | append: '.png' %}
+                    <a class="inner---element {{ block.settings.heading  | remove: ' ' }}" onclick=' {{ block.settings.heading | handle | replace: '-', '_' }}(event);' href="{{ color | split:" " | first }}">
+                      <img src="{{ colorpng | asset_img_url: 'master' }}">
+                      {{ color | split:" " | first }}
+                    </a>
+                    {% endfor %}
+                {%- endfor -%}
+              </div>
+            </div>            
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+        {%- for block in section.blocks -%}
+<script>
+var a = document.getElementById('color-i').getElementsByTagName('a'),
+    length = a.length;
+
+
+document.getElementById("c-{{ block.settings.heading | remove: ' ' }}").onclick = function() {
+  const myElement = document.querySelector('c-{{ block.settings.heading | remove: ' ' }}');
+for(var i=0; i< length; i++){
+    //a[i].href = '&filter.p.tag={{ block.settings.heading | remove: ' ' }}';
+  a[i].parentNode.className = '';
+  a[i].parentNode.classList.add('{{ block.settings.heading | remove: ' ' }}');
+  a[i].parentElement.classList.add("{{ block.settings.heading | remove: ' '}}");
+
+
+  
+}
+
+}
+          
+    </script>
+{% if forloop.index == 9 %}{% break %}{% endif %}
+        {%- endfor -%}
+{% schema %}
+{
+  "name": "ColorandMaterial",
+  "tag": "section",
+  "class": "section color_material",
+  "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Subtitle"
+        },
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.desktop_content_position.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.desktop_content_position.label",
+      "info": "t:sections.rich-text.settings.desktop_content_position.info"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.rich-text.settings.content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.rich-text.settings.content_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.rich-text.settings.content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.rich-text.settings.content_alignment.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "t:sections.rich-text.settings.full_width.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "colourmaterial",
+      "name": "colourmaterial",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.rich-text.blocks.heading.settings.heading.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "colors",
+          "label": "Color Loop"
+        }        
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Color and Material",
+      "blocks": [
+      ]
+    }
+  ]
+}
+{% endschema %}

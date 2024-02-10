@@ -1,0 +1,82 @@
+<div class="intro-block new_layout {{ section.settings.classname }}">
+   <div class="page-width">
+     <div class="page_row">
+       <div class="content_wrapper">
+         <h6>{{ section.settings.title }}</h6>
+          <div class="title-wrapper-with-link">
+           <h2>{{ section.settings.subtitle }} </h2>
+          </div>
+
+         <p>{{ section.settings.content }}</p>
+         <a href="{{ section.settings.button_link }}" target="_blank" class="green_animation_btn" >{{ section.settings.button_label }}
+           <svg xmlns="http://www.w3.org/2000/svg" width="9" height="16" viewBox="0 0 9 16" fill="none">
+            <path d="M1.46265 0.756348L8.26627 7.55998L1.46265 14.3636" stroke="white" stroke-width="1.36073" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+       </div>
+       <div class="image_wrapper">
+
+          <div class="animation_image">
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Shirts2.png?v=1706185163" alt="" class="img-fluid"/>
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Shirts3.png?v=1706185163" alt="" class="img-fluid"/>
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Shirts4.png?v=1706185163" alt="" class="img-fluid"/>
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Shirts5.png?v=1706185163" alt="" class="img-fluid"/>
+            <img src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/Shirts1.png?v=1706185163" alt="" class="img-fluid"/>
+          </div>
+
+         
+       </div>
+     </div>
+    </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Intro Banners",
+    "settings": [
+       {
+            "type": "text",
+            "id": "classname",
+            "label": "Class Name"
+          },
+          {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "Sub Title"
+          },
+          {
+            "type": "textarea",
+            "id": "content",
+            "label": "Content"
+          },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Button label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      
+    ],
+    "presets": [
+    {
+      "name": "Intro Banners"
+    }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

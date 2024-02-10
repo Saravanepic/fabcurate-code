@@ -1,0 +1,148 @@
+<style>
+  .get-ready-for-shaadi-inner h2{
+    color: #333333;
+    font-size: 20px;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+  .get-ready-for-shaadi-inner .row {
+    display: flex;
+    justify-content: center;
+    gap: 85px;
+  }
+  .get-ready-for-shaadi-inner .mb30 {
+    margin-bottom: 30px;
+  }
+  .get-ready-for-shaadi-inner img {
+    max-width: 100%;
+    height: auto;
+}
+  @media (max-width: 767px){
+    .get-ready-for-shaadi-inner .row-width{
+      width: 33%;
+      max-width: 33%;
+    }
+    .get-ready-for-shaadi-inner .row {
+    gap: 10px;
+}
+    .get-ready-for-shaadi-inner h2 {
+    margin-top: 20px;
+    font-size: 18px;
+}
+ 
+}
+  .text-center{
+    text-align:center;
+  }
+</style>
+<section id="get-ready-for-shaadi-{{ section.id }}" class="get-ready-for-shaadi-{{ section.id }}">
+<div class="page-width">
+  <div class="get-ready-for-shaadi-inner">
+    <div class="text-center">
+    
+  {% if section.settings.image1 !=blank %}
+    <img src="{{ section.settings.image1 | img_url: 'master'  }})" alt="{{ section.settings.title }}" style="max-width: 400px;margin: 30px 0 ;">
+    {% else %}
+   <h2>{{ section.settings.title }}</h2>
+    {% endif %}
+    </div>
+        <div class="row">
+          {% for block in section.blocks %}
+          {%- assign img_url = block.settings.image | img_url: 'master' -%}   
+          <div class="row-width mb30">
+            <a href="{{ block.settings.link }}">
+              <img src="https:{{ img_url }}" alt="{{ block.settings.image.alt | default: shop.name }}">
+            </a>
+            {% if block.settings.button_text != blank %}
+              <a href="{{ block.settings.button_link }}" class="shop_now btn">{{ block.settings.button_text }}</a>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+</div> 
+</div>
+  </section>
+{% schema %}
+  {
+    "name": "Get Ready For Shaadi",
+    "class": "product-banner-block-sections",
+    "max_blocks": 70,
+    "settings": [
+      {
+        "type":"text",
+        "id":"title",
+        "label":"Title"
+      },
+         {
+                  "type": "image_picker",
+                  "id": "image1",
+                  "label": "Background Image"
+			  }
+],
+    "blocks": [
+        {
+          "type": "image",
+          "name": "Banner Block",
+          "settings": [	
+              {
+                  "type": "image_picker",
+                  "id": "image",
+                  "label": "Image",
+                  "info": "Recommended Image: Width x Height (770 x 700)PX and (1890 x 800)PX for full banner"
+              },
+              {
+                  "type" : "text",
+                  "id" : "title",
+                  "label" : "Title",
+                  "default" : "Metropolis"
+              },
+              {
+                  "type": "url",
+                  "id": "link",
+                  "label": "Link",
+                  "info": "Optional"
+              },
+              {
+                  "type": "text",
+                  "id": "button_text",
+                  "label": "Button Label"
+                 
+              },
+              {
+                  "type": "url",
+                  "id": "button_link",
+                  "label": "Button Link"
+                 
+              }
+            ]
+        }
+          
+    ],
+    "presets": [
+        {
+            "name": "Get Ready For Shaadi",
+            "category": "block images",
+            "blocks": [
+                {
+                    "type": "image"
+                },
+                {
+                    "type": "image"
+                },
+                 {
+                      "type": "image"
+                 }
+            ]
+        }
+    ]
+  }
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,65 @@
+<div class="commitment new_layout{{ section.settings.classname }}">
+   <div class="page-width">
+     <div class="page_row">
+       <div class="content_wrapper">
+          <h6>{{ section.settings.subtext1 }}</h6>
+           <p>{{ section.settings.subtext2 }}</p>
+          <div class="title-wrapper-with-link">
+           <h2>{{ section.settings.title }} </h2>
+          </div>
+           
+           <p>{{ section.settings.subtext3 }}</p>
+         <p>{{ section.settings.subtext4 }}</span></p>
+       </div>
+     </div>
+    </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Commitment",
+    "settings": [
+       {
+            "type": "text",
+            "id": "classname",
+            "label": "Class Name"
+          },
+          {
+            "type": "textarea",
+            "id": "subtext1",
+            "label": "Sub text 1"
+          },
+          {
+            "type": "textarea",
+            "id": "subtext2",
+            "label": "Sub text 2"
+          },
+          {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "subtext3",
+            "label": "Sub text 3"
+          },
+          {
+            "type": "textarea",
+            "id": "subtext4",
+            "label": "Sub text 4"
+          }
+    ],
+    "presets": [
+    {
+      "name": "Commitment"
+    }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

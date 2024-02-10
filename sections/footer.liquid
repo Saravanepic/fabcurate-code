@@ -1,0 +1,757 @@
+{% comment %}theme-check-disable UndefinedObject{% endcomment %}
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'component-newsletter.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-list-payment.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-list-social.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-rte.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'disclosure.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<noscript>{{ 'component-newsletter.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-list-payment.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-list-social.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'disclosure.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- style -%}
+  .footer {
+    margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .footer {
+      margin-top: {{ section.settings.margin_top }}px;
+    }
+
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  {%- if section.blocks.size > 0 or section.settings.newsletter_enable or section.settings.show_social -%}
+    <div class="footer__content-top page-width">
+      {%- if section.blocks.size > 0 -%}
+        {%- liquid
+          if section.blocks.size == 9
+            assign footer_grid_class = 'grid--3-col-tablet'
+          elsif section.blocks.size > 6
+            assign footer_grid_class = 'grid--4-col-desktop'
+          elsif section.blocks.size > 4
+            assign footer_grid_class = 'grid--3-col-tablet'
+          endif
+        -%}
+        <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet {{ footer_grid_class }}">
+          {%- for block in section.blocks -%}
+            <div class="footer-block grid__item{% if block.type == 'link_list' %} footer-block--menu{% endif %}" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h2 class="footer-block__heading">{{- block.settings.heading | escape -}}</h2>
+              {%- endif -%}
+
+              {%- case block.type -%}
+                {%- when 'text' -%}
+                  <div class="footer-block__details-content rte">
+                    {{ block.settings.subtext }}
+                  </div>
+                <div class="footer_contact_wrapper">
+                {% if block.settings.phone != blank %}
+                  <div class="footer_contact_inner">
+                    <div class="footer_contact_svg">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                        <path d="M18.44 10.9994C18.22 10.9994 17.99 10.9294 17.77 10.8794C17.3245 10.7812 16.8866 10.6509 16.46 10.4894C15.9961 10.3206 15.4861 10.3294 15.0283 10.514C14.5704 10.6986 14.1971 11.046 13.98 11.4894L13.76 11.9394C12.786 11.3976 11.891 10.7246 11.1 9.93938C10.3147 9.1484 9.6418 8.25338 9.09998 7.27938L9.51998 6.99938C9.96334 6.7823 10.3108 6.40891 10.4954 5.95107C10.68 5.49323 10.6888 4.98329 10.52 4.51938C10.3612 4.0918 10.2309 3.65418 10.13 3.20938C10.08 2.98938 10.04 2.75938 10.01 2.52938C9.88854 1.825 9.5196 1.18712 8.9696 0.730619C8.4196 0.274117 7.72467 0.0289887 7.00998 0.0393798H4.00998C3.57901 0.0353333 3.15223 0.124193 2.75869 0.29991C2.36515 0.475627 2.01409 0.734076 1.72941 1.05766C1.44473 1.38125 1.23311 1.76237 1.10897 2.17509C0.98482 2.58781 0.951058 3.02244 1.00998 3.44938C1.54272 7.63876 3.45601 11.5313 6.44763 14.512C9.43925 17.4928 13.3387 19.3919 17.53 19.9094H17.91C18.6474 19.9105 19.3594 19.6399 19.91 19.1494C20.2263 18.8664 20.4791 18.5196 20.6514 18.1317C20.8238 17.7438 20.9119 17.3238 20.91 16.8994V13.8994C20.8977 13.2048 20.6448 12.5359 20.1943 12.007C19.7439 11.4782 19.1238 11.122 18.44 10.9994ZM18.94 16.9994C18.9398 17.1414 18.9094 17.2817 18.8508 17.411C18.7921 17.5403 18.7066 17.6557 18.6 17.7494C18.4882 17.8459 18.3576 17.9179 18.2164 17.961C18.0752 18.004 17.9265 18.0171 17.78 17.9994C14.0349 17.5192 10.5562 15.8059 7.89269 13.1297C5.22917 10.4535 3.53239 6.96672 3.06998 3.21938C3.05406 3.0729 3.06801 2.92471 3.11098 2.78377C3.15395 2.64283 3.22505 2.51207 3.31998 2.39938C3.41369 2.29271 3.52904 2.20722 3.65836 2.1486C3.78767 2.08997 3.92799 2.05956 4.06998 2.05938H7.06998C7.30253 2.05421 7.5296 2.13026 7.71212 2.27445C7.89464 2.41864 8.02119 2.62195 8.06998 2.84938C8.10998 3.12271 8.15998 3.39271 8.21998 3.65938C8.3355 4.18652 8.48924 4.70456 8.67998 5.20938L7.27998 5.85938C7.16028 5.9143 7.0526 5.99233 6.96314 6.08898C6.87367 6.18562 6.80418 6.29899 6.75865 6.42257C6.71312 6.54615 6.69245 6.67751 6.69783 6.8091C6.7032 6.94069 6.73452 7.06992 6.78998 7.18938C8.22918 10.2721 10.7072 12.7502 13.79 14.1894C14.0334 14.2894 14.3065 14.2894 14.55 14.1894C14.6747 14.1448 14.7893 14.0758 14.8871 13.9866C14.985 13.8973 15.0641 13.7895 15.12 13.6694L15.74 12.2694C16.2569 12.4543 16.7846 12.6079 17.32 12.7294C17.5866 12.7894 17.8566 12.8394 18.13 12.8794C18.3574 12.9282 18.5607 13.0547 18.7049 13.2372C18.8491 13.4198 18.9252 13.6468 18.92 13.8794L18.94 16.9994Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="footer_contact_content">
+                      <a href="tel:{{ block.settings.phone | remove: '+' | remove: ' ' | remove: '-' }}">{{ block.settings.phone }}</a>
+                    </div>                
+                  </div>
+                  {% endif %}
+                 {% if block.settings.email != blank %}               
+                  <div class="footer_contact_inner">
+                    <div class="footer_contact_svg">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16" fill="none">
+                      <path d="M17 0H3C2.20435 0 1.44129 0.316071 0.87868 0.87868C0.316071 1.44129 0 2.20435 0 3V13C0 13.7956 0.316071 14.5587 0.87868 15.1213C1.44129 15.6839 2.20435 16 3 16H17C17.7956 16 18.5587 15.6839 19.1213 15.1213C19.6839 14.5587 20 13.7956 20 13V3C20 2.20435 19.6839 1.44129 19.1213 0.87868C18.5587 0.316071 17.7956 0 17 0ZM16.59 2L10.71 7.88C10.617 7.97373 10.5064 8.04812 10.3846 8.09889C10.2627 8.14966 10.132 8.1758 10 8.1758C9.86799 8.1758 9.73728 8.14966 9.61542 8.09889C9.49356 8.04812 9.38296 7.97373 9.29 7.88L3.41 2H16.59ZM18 13C18 13.2652 17.8946 13.5196 17.7071 13.7071C17.5196 13.8946 17.2652 14 17 14H3C2.73478 14 2.48043 13.8946 2.29289 13.7071C2.10536 13.5196 2 13.2652 2 13V3.41L7.88 9.29C8.4425 9.8518 9.205 10.1674 10 10.1674C10.795 10.1674 11.5575 9.8518 12.12 9.29L18 3.41V13Z" fill="white"/>
+                      </svg>
+                    </div>
+                    <div class="footer_contact_content">
+                      <a href="mailto:{{ block.settings.email }}">{{ block.settings.email }}</a>
+                    </div>                
+                  </div> 
+                   {% endif %}
+                </div>
+                {%- when 'link_list' -%}
+                  {%- if block.settings.menu != blank -%}
+                    <ul class="footer-block__details-content list-unstyled">
+                      {%- for link in block.settings.menu.links -%}
+                        <li>
+                          <a href="{{ link.url }}" class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}">
+                            {{ link.title }}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                {%- when 'image' -%}
+                  <div class="footer-block__details-content footer-block-image {{ block.settings.alignment }}">
+                    {%- if block.settings.image != blank -%}
+                      {%- assign image_size_2x = block.settings.image_width | times: 2 | at_most: 5760 -%}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="52" viewBox="0 0 137 33" fill="none">
+<g clip-path="url(#clip0_502_3165)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M23.8302 24.2995H26.515V26.9842H23.8302V24.2995ZM6.52358 24.2995H9.20833V26.9842H6.52358V24.2995ZM23.8302 20.8382H26.515V23.5229H23.8302V20.8382ZM6.52358 20.8382H9.20833V23.5229H6.52358V20.8382ZM23.8302 17.399H26.515V20.0616H23.8302V17.399ZM6.52358 17.399H9.20833V20.0616H6.52358V17.399ZM16.1976 19.7066C16.3751 19.6622 16.4194 19.6178 16.6635 19.6178C16.6635 19.6844 17.3291 20.7716 17.662 21.7479C18.0613 22.9682 18.2388 23.9667 18.1057 25.298C17.9726 26.5405 17.3513 25.3645 17.1738 25.0317C16.7966 24.3439 16.4638 22.347 16.3529 21.5038L16.1976 19.7066ZM13.5794 18.8413C13.5794 18.4641 13.7347 18.1312 14.1119 18.109L14.1563 19.4403C13.7791 19.4403 13.5794 19.2628 13.5794 18.8413ZM13.0247 18.7969C13.0247 19.4847 13.5572 19.9728 14.245 19.9728C14.245 20.9713 14.6 23.1457 14.8219 24.0332C15.0216 24.8098 15.3988 25.8305 15.9313 26.363C16.1088 26.5405 16.3972 26.8067 16.6635 26.8289V26.9842H9.98491V13.8046C10.7171 13.8046 11.294 13.8489 11.9818 13.8489L13.9344 13.7602L14.0675 17.5765C13.4684 17.7097 13.0247 18.1978 13.0247 18.7969ZM23.8302 13.9377H26.515V16.6224H23.8302V13.9377ZM6.52358 13.9377H9.20833V16.6224H6.52358V13.9377ZM23.8302 10.4542H26.515V13.1167H23.8302V10.4542ZM6.52358 10.4542H9.20833V13.1167H6.52358V10.4542ZM15.9313 12.1627L15.9757 11.497C16.02 10.6317 16.2863 9.25603 16.6635 8.50164C17.551 6.85973 18.7935 8.50164 18.7935 9.58885C18.7935 10.5873 17.7951 11.4526 16.9519 11.8298C16.7079 11.9186 16.1976 12.1627 15.9313 12.1627ZM23.8302 6.99285H26.515V9.6776H23.8302V6.99285ZM6.52358 6.99285H9.20833V9.6776H6.52358V6.99285ZM17.2848 6.99285H23.0536V26.9842H17.662V26.8289C18.4164 26.6514 18.7048 25.4755 18.7048 24.5214C18.7048 22.9238 18.1945 21.3041 17.4623 19.995C17.1294 19.396 17.0185 19.4403 17.3513 19.2406C17.4845 19.1741 17.551 19.1297 17.662 19.0631C17.8173 18.9744 18.0392 18.8191 18.1945 18.7081C18.5717 18.4197 18.8157 18.1978 19.1707 17.865C19.5258 17.51 20.613 16.0899 20.613 15.6684C20.613 15.4465 20.2801 15.3577 20.1026 15.624C20.0583 15.7127 20.0139 15.8237 19.9473 15.9346C19.8808 16.0456 19.8364 16.1121 19.7698 16.2453L19.1929 17.0662C18.6382 17.6653 17.5954 18.7525 16.7966 18.93C16.486 18.7303 16.4638 18.4862 16.1088 18.3087C16.1088 17.3768 15.9979 16.5115 15.9757 15.5796C15.9757 15.3134 15.9313 15.2024 15.9313 14.8918V12.7174C16.2863 12.6952 17.2404 12.2514 17.5732 12.0517C18.3498 11.5858 19.2817 10.7426 19.2817 9.76635C19.2817 8.70133 18.9267 7.96913 18.0835 7.43661C17.906 7.32567 17.5288 7.14817 17.2848 7.12598V6.99285ZM13.9344 13.028V13.2055C13.7125 13.2055 13.7347 13.2499 13.5572 13.2499C12.5587 13.3386 11.0056 13.3164 9.98491 13.3164V6.99285H16.1532V7.12598C15.2435 7.14817 14.5556 8.50164 14.3338 9.34478C14.0453 10.4542 13.9344 11.6301 13.9344 13.028ZM16.1088 1.44585V6.21627H13.4241V2.13368C13.4241 1.80086 12.6697 1.57898 12.6697 2.31118V6.21627H9.98491V3.59809C9.98491 3.1987 9.20833 3.10995 9.20833 3.68684V6.21627H6.52358V4.86281C6.52358 4.33029 5.76919 4.3081 5.76919 4.81843V6.21627H3.99415C3.43945 6.21627 3.43945 6.99285 3.94977 6.99285H5.76919V9.6776H2.86256C2.15254 9.6776 2.26348 10.4542 2.70724 10.4542H5.76919V13.1167H1.39815C0.665946 13.1167 0.688134 13.9377 1.39815 13.9377H5.76919V16.6224H0.39969C-0.15501 16.6224 -0.110634 17.399 0.444066 17.399H5.76919V20.0616H1.26502C0.73251 20.0616 0.73251 20.8382 1.26502 20.8382H5.76919V23.5229H2.77381C2.19692 23.5229 2.30786 24.2995 2.66287 24.2995H5.76919V26.9842H3.99415C3.46164 26.9842 3.43945 27.7386 3.94977 27.7386H5.76919V29.1587C5.76919 29.6912 6.52358 29.6912 6.52358 29.1587V27.7386H9.20833V30.3346C9.20833 30.845 9.98491 30.845 9.98491 30.3346V27.7386H12.6697V31.7325C12.6697 32.265 13.4241 32.3094 13.4241 31.7769V27.7386H16.1088V32.4647C16.1088 33.1747 16.9298 33.2191 16.9298 32.3759V27.7386H19.6145V31.7769C19.6145 32.265 20.3689 32.3537 20.3689 31.6437V27.7386H23.0536V30.3346C23.0536 30.8671 23.8302 30.845 23.8302 30.2903V27.7386H26.515V29.1587C26.515 29.6912 27.2916 29.6912 27.2916 29.1587V27.7386H29.0888C29.5769 27.7386 29.6435 26.9842 28.9557 26.9842H27.2916V24.2995H30.2869C30.8194 24.2995 30.7973 23.5229 30.2869 23.5229H27.2916V20.8382H31.7735C32.2839 20.8382 32.2839 20.0616 31.7735 20.0616H27.2916V17.399H32.5945C33.127 17.399 33.1492 16.6224 32.6389 16.6224H27.2916V13.9377H31.6404C32.3504 13.9377 32.3504 13.1167 31.6404 13.1167H27.2916V10.4542H30.3757C30.7307 10.4542 30.8638 9.6776 30.2426 9.6776H27.2916V6.99285H29.0888C29.6213 6.99285 29.5769 6.21627 29.0444 6.21627H27.2916V4.81843C27.2916 4.33029 26.515 4.3081 26.515 4.86281V6.21627H23.8302V3.68684C23.8302 3.13214 23.0536 3.17652 23.0536 3.59809V6.21627H20.3689V2.26681C20.3689 1.68992 19.6145 1.68992 19.6145 2.17806V6.21627H16.9298V1.55679C16.9298 0.8024 16.1088 0.868964 16.1088 1.44585Z" fill="#ABB747"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M65.6544 17.3104H64.2343V13.0281C65.5434 13.0281 66.6528 12.8284 66.6528 14.5813C66.6528 15.7795 66.8969 17.3104 65.6544 17.3104ZM65.2328 11.12H64.2343V7.45895C66.4309 7.45895 66.4087 7.39239 66.4087 9.89963C66.4087 10.6096 65.9872 11.12 65.2328 11.12ZM62.1043 19.2186H65.8319C66.6972 19.2186 67.6291 18.8192 68.1394 18.1536C68.4057 17.7764 68.5388 17.5101 68.6497 16.9998C68.8938 15.9791 68.9382 13.3166 67.9397 12.4734C67.74 12.2959 67.4294 12.0519 67.141 11.9853V11.8522C67.5847 11.7412 68.0507 11.2309 68.2282 10.8093C68.7163 9.74432 68.7163 7.28145 67.851 6.41611C67.2741 5.81704 66.5641 5.55078 65.6544 5.55078H62.1043V19.2186Z" fill="#ABB747"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M53.3849 7.94709H53.518C53.518 8.23553 53.6956 9.27837 53.7621 9.67775L54.2724 13.1613C54.2946 13.4275 54.3612 13.716 54.4056 14.0266C54.4278 14.2707 54.4943 14.6479 54.5165 14.8919H52.3865L52.6305 13.1835C52.7193 12.5844 52.808 12.0519 52.8968 11.4528L53.274 8.83461C53.3184 8.54616 53.3849 8.23553 53.3849 7.94709ZM49.8127 19.2186H51.7652L52.1202 16.7557H54.8493C54.8493 17.022 54.8715 17.1329 54.9159 17.377C54.9825 17.7986 55.16 18.908 55.16 19.2186H57.29L56.225 12.3847C56.0253 11.2309 55.8478 10.0993 55.6703 8.98992C55.515 8.08021 55.2931 6.28299 55.1156 5.55078H51.9871C51.9871 5.81704 51.9205 6.10548 51.8761 6.39393C51.8096 6.70456 51.7874 6.92644 51.743 7.25926L49.8127 19.2186Z" fill="#ABB747"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M40.1383 19.2186H42.2239V13.5385H45.0418V11.6303H42.2239V7.45895H45.7962V5.55078H40.1383V19.2186Z" fill="#ABB747"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M98.6037 12.3181H96.9839V6.30517C97.7605 6.30517 99.358 6.21642 99.9793 6.50487C101.222 7.08175 101.022 8.74585 101.022 10.0328C101.022 11.6525 100.223 12.3181 98.6037 12.3181ZM96.1186 19.2186H96.9839V13.0725C98.0268 13.0725 99.469 12.9394 100.29 13.5385C100.756 13.8935 100.889 14.3372 101 15.0472C101.177 16.2232 100.778 18.2201 101.288 19.2186H102.154C101.555 18.0648 102.176 15.846 101.71 14.2929C101.466 13.4941 100.889 12.9172 100.024 12.7175V12.5844C100.29 12.5622 100.645 12.3625 100.845 12.2294C101.954 11.4972 101.887 10.0771 101.887 8.81242C101.887 7.3702 101.555 6.37174 100.423 5.81704C100.135 5.66172 99.6243 5.55078 99.2027 5.55078H96.1186V19.2186Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M110.785 6.63745H110.918L112.649 14.2923C112.715 14.5808 112.87 15.1355 112.87 15.4461H108.877C108.877 15.0911 109.232 13.671 109.32 13.2273C109.72 11.4079 110.186 9.54408 110.541 7.76904L110.785 6.63745ZM107.279 19.218C108.189 19.218 108.011 19.3512 108.189 18.508C108.255 18.1308 108.677 16.4002 108.699 16.1783H113.048C113.048 16.4002 113.558 18.3971 113.647 18.8852C113.714 19.2846 113.603 19.218 114.557 19.218C114.535 18.974 114.424 18.5746 114.379 18.3527C114.313 18.0421 114.246 17.7758 114.18 17.4874L113.048 12.362C112.515 10.0988 112.027 7.76904 111.517 5.50586H110.23L109.498 8.90062C109.232 10.0322 109.01 11.1638 108.766 12.3176C108.699 12.5616 107.279 18.9296 107.279 19.218Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M84.8919 15.4023C84.8919 16.4895 85.0473 17.5545 85.491 18.1979C85.7795 18.5751 85.9791 18.797 86.4007 19.0189C86.7557 19.2408 87.3548 19.3517 87.8873 19.3517C90.0174 19.3517 90.7496 17.6876 90.7496 15.7573V5.55078H89.9508V16.1788C89.9508 17.5101 89.3295 18.5751 87.8429 18.5751C86.2676 18.5751 85.7573 17.3548 85.7573 15.7573V5.55078H84.8919V15.4023Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M73.8197 8.4589V16.3135C73.8197 17.9776 74.9291 19.3532 76.6375 19.3532C78.701 19.3532 79.6773 17.9997 79.6773 16.025V14.3609H78.8564C78.8564 15.4703 79.0117 16.9791 78.4126 17.8001C77.7913 18.6876 76.3491 18.7098 75.5947 18.266C75.3506 18.1107 75.1731 17.911 75.0178 17.6447C74.7294 17.1788 74.6406 16.4466 74.6406 15.7144V9.12454C74.6406 7.99296 74.7738 6.95012 75.7057 6.41761C76.7929 5.81853 78.8564 6.21791 78.8564 8.54766V9.98988H79.6773C79.6773 8.59203 79.7882 7.46044 78.9451 6.35104C78.0798 5.21945 75.8388 4.99757 74.6184 6.26229C74.1969 6.68386 73.8197 7.61576 73.8197 8.4589Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M130.754 19.2186H136.168V18.442H131.619V12.6731H135.391V11.8966H131.619V6.30517H136.168V5.55078H130.754V19.2186Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M119.305 6.30517H122.123V19.2186H122.989V6.30517H125.762V5.55078H119.305V6.30517Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M97.1614 28.5157H98.1155C98.1155 27.6504 98.3374 26.7185 98.3374 26.0307H98.4705C98.4705 26.7629 98.6924 27.8945 98.6924 28.5157H99.6909L100.246 23.5234H99.6021C99.6021 24.1225 99.4024 25.6535 99.3358 26.3413C99.2693 27.1179 99.358 27.1401 99.114 27.1623C99.114 26.8516 99.0918 26.5632 99.0474 26.2747C99.003 25.9419 99.003 25.6757 98.9587 25.3429L98.8033 23.5234H98.0711L97.7383 27.1179H97.5608C97.5608 26.6963 97.3611 24.9435 97.2945 24.4331C97.2724 24.1003 97.228 23.8119 97.2058 23.5234H96.4736C96.5623 23.6788 96.7177 25.6313 96.7842 26.0307L97.0283 28.2939C97.0283 28.4492 97.0061 28.5157 97.1614 28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M102.154 28.5157H102.842V25.1653H102.975L103.619 27.6504C103.685 27.8945 103.818 28.2495 103.84 28.5157H104.595V23.5234H103.974V26.3857H103.84C103.818 26.2082 103.73 25.8754 103.663 25.6979C103.596 25.4316 103.552 25.1875 103.485 24.9657L103.108 23.5234H102.154V28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M118.684 27.8279H118.129V26.2526C119.084 26.2526 119.039 26.2748 119.039 27.3842C119.039 27.6504 118.95 27.8279 118.684 27.8279ZM118.551 25.5647H118.129V24.2113C119.017 24.2113 118.95 24.1891 118.95 25.1654C118.95 25.4094 118.795 25.5647 118.551 25.5647ZM117.419 28.5157C118.019 28.5157 118.995 28.6045 119.394 28.2717C119.86 27.8945 119.771 27.4285 119.771 26.7851C119.771 26.2304 119.527 26.0529 119.084 25.8532C120.171 25.2985 119.904 23.5234 118.551 23.5234H117.419V28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M122.899 25.7866H122.5V24.2113C123.41 24.2113 123.321 24.1669 123.321 25.3872C123.321 25.6091 123.121 25.7866 122.899 25.7866ZM121.723 28.5157H122.5V26.4744C123.21 26.4744 123.321 26.4079 123.321 27.3398C123.321 27.8501 123.299 28.1164 123.41 28.5157H124.12C124.075 27.8501 124.12 27.6504 124.075 27.1179C124.053 26.6741 123.942 26.2526 123.587 26.1638C123.698 26.0085 123.72 26.0972 123.942 25.6535C124.053 25.4316 124.519 23.5234 122.899 23.5234H121.723V28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M86.6669 25.7866H86.2675V24.2113C87.1329 24.2113 87.0885 24.1447 87.0885 25.2985C87.0885 25.5869 86.9553 25.7866 86.6669 25.7866ZM85.4909 28.5157H86.2675V26.4744C87.1329 26.4744 87.0885 26.4966 87.0885 27.6948C87.0885 27.8723 87.0885 28.3604 87.155 28.4492C87.2216 28.5601 87.3325 28.5157 87.4879 28.5157C87.621 28.5157 87.7541 28.5157 87.8872 28.5157C87.7985 28.1164 87.8872 27.5838 87.8429 27.1179C87.8207 26.6963 87.7097 26.2526 87.3547 26.1638C87.3769 25.9197 87.4213 26.0085 87.5544 25.8754C87.6432 25.7866 87.7319 25.6535 87.7541 25.5204C87.8429 25.2097 87.8429 24.8769 87.8207 24.5663C87.7319 23.8784 87.4879 23.5234 86.6669 23.5234H85.4909V28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M54.8048 25.7866H54.4276V24.2113C55.2929 24.2113 55.2929 24.1225 55.2929 25.2541C55.2929 25.6091 55.1598 25.7866 54.8048 25.7866ZM53.7176 28.5157H54.4276V26.4744C55.3373 26.4744 55.2929 26.4301 55.2929 27.9388C55.2929 28.2051 55.3373 28.316 55.3373 28.5157H56.1139C55.8476 27.9388 56.3358 26.3635 55.5592 26.1638C55.6923 26.0529 56.0251 25.8088 56.0251 25.2097C56.0251 24.4997 56.1361 23.5234 54.9379 23.5234H53.7176V28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M93.5227 24.1207H93.5005C93.2786 24.1207 93.0568 24.2538 93.0568 24.5867V27.4489C93.0568 27.7152 93.3008 27.8705 93.5005 27.8705C93.7224 27.8705 93.9443 27.7152 93.9443 27.4489V24.5867C93.9443 24.2538 93.7224 24.1207 93.5227 24.1207ZM93.5227 28.5361H93.5005C93.1899 28.5361 92.8571 28.4474 92.6574 28.2255C92.5021 28.0924 92.3467 27.7596 92.3467 27.4933V24.4979C92.3467 23.8101 92.9236 23.4551 93.5005 23.4551H93.5227C94.0996 23.4551 94.6765 23.8101 94.6765 24.4979V27.4933C94.6765 27.7596 94.5212 28.0924 94.3659 28.2255C94.1662 28.4474 93.8333 28.5361 93.5227 28.5361Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M78.0355 24.055H78.0133C77.8136 24.055 77.5917 24.1881 77.5917 24.521V27.3832C77.5917 27.6495 77.8136 27.8048 78.0355 27.8048C78.2351 27.8048 78.457 27.6495 78.457 27.3832V24.521C78.457 24.1881 78.2573 24.055 78.0355 24.055ZM78.0355 28.4704H78.0133C77.7026 28.4704 77.3698 28.3595 77.1701 28.1598C77.0148 28.0267 76.8595 27.6939 76.8595 27.4276V24.4322C76.8595 23.7444 77.4364 23.3894 78.0133 23.3672H78.0355C78.6123 23.3894 79.1892 23.7444 79.1892 24.4322V27.4276C79.1892 27.6939 79.0339 28.0267 78.8786 28.1598C78.6789 28.3595 78.3461 28.4704 78.0355 28.4704Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M81.1862 27.3398C81.1862 28.0054 81.5413 28.5601 82.1847 28.5601C82.5397 28.5601 82.9613 28.5601 83.2276 28.2051C83.3607 28.0276 83.4938 27.6726 83.4938 27.3842V23.5234H82.7616V27.3398C82.7838 27.9832 82.451 27.8723 82.2735 27.8723C81.9628 27.8723 81.8963 27.606 81.8963 27.2954V23.5234H81.1862V27.3398Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M49.3908 27.4729C49.3908 28.6932 50.9662 28.9151 51.4987 28.0942C51.6762 27.8057 51.6984 27.3176 51.6984 26.8738V23.5234H50.9883V27.4285C50.9883 27.8723 50.7665 27.8723 50.478 27.8723C50.2118 27.8723 50.123 27.6948 50.123 27.4285V23.5234H49.3908V27.4729Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M114.047 24.6106H114.224C114.358 25.4538 114.446 26.186 114.557 26.9848H113.736C113.803 26.4523 113.958 25.2985 114.047 24.6106ZM112.827 28.5157H113.514C113.514 28.316 113.603 27.8057 113.648 27.606C113.803 27.606 114.513 27.5617 114.624 27.6282C114.735 27.717 114.668 27.606 114.69 27.7835C114.713 27.8723 114.713 27.9832 114.713 28.0276C114.757 28.2273 114.779 28.316 114.779 28.5157H115.556L114.824 24.1447C114.801 23.945 114.757 23.7231 114.735 23.5234C114.446 23.5234 114.158 23.5234 113.869 23.5234C113.736 23.5234 113.67 23.5234 113.625 23.5234C113.603 23.5234 113.581 23.7231 113.537 24.0559C113.448 24.5441 113.381 25.0322 113.315 25.5425C113.226 26.0529 113.137 26.5632 113.071 27.0291C113.026 27.3176 112.982 27.4951 112.938 27.7835C112.915 27.9832 112.849 28.2939 112.827 28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M59.0869 24.5663H59.2422L59.5529 26.9848H58.7541C58.7763 26.541 58.976 25.1432 59.0869 24.5663ZM57.8444 28.5157H58.51C58.5544 28.2939 58.6432 27.6504 58.6432 27.6282C58.9982 27.606 59.4197 27.606 59.6638 27.606C59.686 27.8057 59.7748 28.316 59.7969 28.5157H60.507C60.1741 26.6298 60.1076 26.186 59.7526 23.5234H58.621C58.621 23.7675 58.5544 23.945 58.5322 24.1225C58.4878 24.3666 58.4657 24.5441 58.4435 24.766L57.8444 28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M45.1309 24.832V27.2061C45.1309 27.5833 45.1975 27.9161 45.3528 28.138C45.4416 28.2711 45.5525 28.3599 45.6634 28.4264C46.2181 28.7371 47.4385 28.6039 47.4385 27.428V26.6958H46.7506C46.7506 27.0286 46.8394 27.8717 46.44 27.8717C46.2181 27.8717 45.9075 27.8939 45.9075 27.5167V24.5214C45.9075 24.122 46.2403 24.1663 46.3956 24.1663C46.8394 24.1663 46.7506 24.7432 46.7506 25.1648H47.4385C47.4385 24.3438 47.4828 23.4785 46.2181 23.4785C45.4416 23.4785 45.1309 24.0554 45.1309 24.832Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M133.262 26.0293C133.262 27.4937 135.325 28.0484 135.991 26.6284C136.08 26.4509 136.146 26.3178 136.168 26.1846V25.8962C136.146 25.7631 136.102 25.6521 136.035 25.4746C135.725 24.7868 134.97 24.3652 134.127 24.6981C133.95 24.7868 133.839 24.8756 133.705 25.0087C133.461 25.2528 133.262 25.5634 133.262 26.0293Z" fill="#ABB747"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M40.1383 25.9871C40.1383 26.2089 40.1605 26.4308 40.2492 26.6305C40.2936 26.7193 40.4933 26.9855 40.5598 27.0521C41.4252 27.9174 43.0005 27.3627 43.0005 25.9871C43.0005 25.4102 42.579 24.922 42.1574 24.7223C41.2255 24.2342 40.1383 25.0108 40.1383 25.9871Z" fill="#ABB747"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M128.802 24.6545V27.3836C128.802 28.9811 131.132 28.9811 131.132 27.3836V26.6958H130.444C130.444 27.7386 130.466 27.8717 129.845 27.8717C129.534 27.8717 129.534 27.3392 129.534 27.1173V24.9207C129.534 24.2107 129.645 24.1663 130.067 24.1663C130.51 24.1663 130.444 24.7654 130.444 25.1648H131.132C131.132 24.2773 131.109 23.4785 129.889 23.4785C129.223 23.4785 128.802 23.9888 128.802 24.6545Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M66.0981 28.5157H68.2281V27.8279H66.8747V26.3413H67.9619V25.6535H66.8747V24.2113H68.2281V23.5234H66.0981V28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M73.5091 26.9848V28.5157H74.2192C74.2413 26.3635 74.2192 26.9404 74.7073 25.2319L75.0845 23.9672C75.1289 23.8563 75.1954 23.6122 75.2176 23.5234H74.552L74.086 25.2319C74.0195 25.5204 74.0195 25.5204 73.9751 25.6979C73.9085 25.6979 73.9085 25.6979 73.8198 25.6979C73.7754 25.4982 73.3316 23.7675 73.2651 23.5234H72.5107L72.7547 24.3666C72.8435 24.6772 72.9323 24.9213 73.021 25.2319C73.1098 25.5425 73.5091 26.7851 73.5091 26.9848Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M109.188 28.5157H109.964V26.4301H110.963V25.7422H109.964V24.2113H111.229V23.5234H109.188V28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M61.8823 24.2113H62.7477V28.5157H63.4577V24.2113H64.2786V23.5234H61.8823V24.2113Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M133.661 4.17525C132.707 4.17525 131.797 3.33211 131.797 2.55553C131.797 1.88989 131.841 1.26862 132.418 0.84705C133.86 -0.284538 135.569 0.73611 135.569 2.31146C135.569 3.3543 134.704 4.17525 133.661 4.17525ZM133.461 0.00390625H133.971C134.016 0.00390625 134.06 0.0260943 134.149 0.0704703C134.748 0.314538 135.414 0.580794 135.724 1.37956C135.99 2.02301 135.99 2.53334 135.724 3.1546C135.17 4.57464 133.084 4.99621 132.063 3.82024C131.597 3.28773 131.442 2.88835 131.442 2.13395C131.442 1.313 132.108 0.469854 132.862 0.18141L133.461 0.00390625Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M126.072 28.5157H126.804V23.5234H126.072V28.5157Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M133.794 2.13377H133.262V1.51251C134.061 1.51251 134.216 1.44594 134.216 1.91189C134.216 2.0894 133.994 2.13377 133.794 2.13377ZM132.885 3.35411H133.262V2.46659C133.683 2.46659 133.817 2.42222 134.305 3.35411H134.748C134.482 2.84379 134.127 2.53316 134.127 2.35565C134.815 2.31128 134.815 1.17969 133.972 1.17969H132.885V3.35411Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_502_3165">
+<rect width="136.168" height="33" fill="white"/>
+</clipPath>
+</defs>
+</svg> {%- else -%}
+                      {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                    {%- endif -%}
+                 {%- if section.settings.show_social -%}
+          <ul class="footer__list-social list-unstyled list-social" role="list">
+            {%- if settings.social_twitter_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_twitter_link }}" class="link list-social__link" >
+                  {%- render 'icon-twitter' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_facebook_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_facebook_link }}" class="link list-social__link" >
+                  {%- render 'icon-facebook' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_pinterest_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_pinterest_link }}" class="link list-social__link" >
+                  {%- render 'icon-pinterest' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_instagram_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_instagram_link }}" class="link list-social__link" >
+                  {%- render 'icon-instagram' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_tiktok_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_tiktok_link }}" class="link list-social__link" >
+                  {%- render 'icon-tiktok' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_tumblr_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_tumblr_link }}" class="link list-social__link" >
+                  {%- render 'icon-tumblr' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_snapchat_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_snapchat_link }}" class="link list-social__link" >
+                  {%- render 'icon-snapchat' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_youtube_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_youtube_link }}" class="link list-social__link" >
+                  {%- render 'icon-youtube' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_vimeo_link != blank -%}
+              <li class="list-social__item">
+                <a href="{{ settings.social_vimeo_link }}" class="link list-social__link" >
+                  {%- render 'icon-vimeo' -%}
+                  <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
+                <div class="footer-block--newsletter dom">
+        {%- if section.settings.newsletter_enable -%}
+          <div class="footer-block__newsletter">
+            {%- if section.settings.newsletter_heading != blank -%}
+              <h2 class="footer-block__heading">{{ section.settings.newsletter_heading | escape }}</h2>
+            {%- endif -%}
+            {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="newsletter-form__field-wrapper">
+                <div class="field">
+                  <input
+                    id="NewsletterForm--{{ section.id }}"
+                    type="email"
+                    name="contact[email]"
+                    class="field__input"
+                    value="{{ form.email }}"
+                    aria-required="true"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    autocomplete="email"
+                    {% if form.errors %}
+                      autofocus
+                      aria-invalid="true"
+                      aria-describedby="ContactFooter-error"
+                    {% elsif form.posted_successfully? %}
+                      aria-describedby="ContactFooter-success"
+                    {% endif %}
+                    placeholder="{{ 'newsletter.label' | t }}"
+                    required
+                  >
+                  <label class="field__label" for="NewsletterForm--{{ section.id }}">
+                    {{ 'newsletter.label' | t }}
+                  </label>
+                  <button type="submit" class="newsletter-form__button field__button" name="commit" id="Subscribe" aria-label="{{ 'newsletter.button_label' | t }}">
+                    {{ section.settings.cta }}
+                  </button>
+                </div>
+                {%- if form.errors -%}
+                  <small class="newsletter-form__message form__message" id="ContactFooter-error">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</small>
+                {%- endif -%}
+              </div>
+              {%- if form.posted_successfully? -%}
+                <h3 class="newsletter-form__message newsletter-form__message--success form__message" id="ContactFooter-success" tabindex="-1" autofocus>{% render 'icon-success' %}{{ 'newsletter.success' | t }}</h3>
+              {%- endif -%}
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+
+       
+      </div>
+                  </div>
+                {%- endcase -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <div class="footer-block--newsletter hom">
+        {%- if section.settings.newsletter_enable -%}
+          <div class="footer-block__newsletter">
+            {%- if section.settings.newsletter_heading != blank -%}
+              <h2 class="footer-block__heading">{{ section.settings.newsletter_heading | escape }}</h2>
+            {%- endif -%}
+            {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="newsletter-form__field-wrapper">
+                <div class="field">
+                  <input
+                    id="NewsletterForm--{{ section.id }}"
+                    type="email"
+                    name="contact[email]"
+                    class="field__input"
+                    value="{{ form.email }}"
+                    aria-required="true"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    autocomplete="email"
+                    {% if form.errors %}
+                      autofocus
+                      aria-invalid="true"
+                      aria-describedby="ContactFooter-error"
+                    {% elsif form.posted_successfully? %}
+                      aria-describedby="ContactFooter-success"
+                    {% endif %}
+                    placeholder="{{ 'newsletter.label' | t }}"
+                    required
+                  >
+                  <label class="field__label" for="NewsletterForm--{{ section.id }}">
+                    {{ 'newsletter.label' | t }}
+                  </label>
+                  <button type="submit" class="newsletter-form__button field__button" name="commit" id="Subscribe" aria-label="{{ 'newsletter.button_label' | t }}">
+                    {{ section.settings.cta }}
+                  </button>
+                </div>
+                {%- if form.errors -%}
+                  <small class="newsletter-form__message form__message" id="ContactFooter-error">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</small>
+                {%- endif -%}
+              </div>
+              {%- if form.posted_successfully? -%}
+                <h3 class="newsletter-form__message newsletter-form__message--success form__message" id="ContactFooter-success" tabindex="-1" autofocus>{% render 'icon-success' %}{{ 'newsletter.success' | t }}</h3>
+              {%- endif -%}
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+
+       
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="footer__content-bottom">
+    <div class="footer__content-bottom-wrapper page-width">
+      <div class="footer__column footer__localization isolate">
+        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+          <noscript>
+            {%- form 'localization', id: 'FooterCountryFormNoScript', class: 'localization-form' -%}
+              <div class="localization-form__select">
+                <h2 class="visually-hidden" id="FooterCountryLabelNoScript">{{ 'localization.country_label' | t }}</h2>
+                <select class="localization-selector link" name="country_code" aria-labelledby="FooterCountryLabelNoScript">
+                  {%- for country in localization.available_countries -%}
+                    <option value="{{ country.iso_code }}" {%- if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                      {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                    </option>
+                  {%- endfor -%}
+                </select>
+                {% render 'icon-caret' %}
+              </div>
+              <button class="button button--tertiary">{{ 'localization.update_country' | t }}</button>
+            {%- endform -%}
+          </noscript>
+          <localization-form>
+            {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+              <div class="no-js-hidden">
+                <h2 class="caption-large text-body" id="FooterCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                <div class="disclosure">
+                  <button type="button" class="disclosure__button localization-form__select localization-selector link link--text caption-large" aria-expanded="false" aria-controls="FooterCountryList" aria-describedby="FooterCountryLabel">
+                    {{ localization.country.name }} ({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }})
+                    {% render 'icon-caret' %}
+                  </button>
+                  <div class="disclosure__list-wrapper" hidden>
+                    <ul id="FooterCountryList" role="list" class="disclosure__list list-unstyled">
+                      {%- for country in localization.available_countries -%}
+                        <li class="disclosure__item" tabindex="-1">
+                          <a class="link link--text disclosure__link caption-large{% if country.iso_code == localization.country.iso_code %} disclosure__link--active{% endif %} focus-inset" href="#"{% if country.iso_code == localization.country.iso_code %} aria-current="true"{% endif %} data-value="{{ country.iso_code }}">
+                            {{ country.name }} <span class="localization-form__currency">({{ country.currency.iso_code }} {{ country.currency.symbol }})</span>
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                </div>
+                <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+
+        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+          <noscript>
+            {%- form 'localization', id: 'FooterLanguageFormNoScript', class: 'localization-form' -%}
+              <div class="localization-form__select">
+                <h2 class="visually-hidden" id="FooterLanguageLabelNoScript">{{ 'localization.language_label' | t }}</h2>
+                <select class="localization-selector link" name="locale_code" aria-labelledby="FooterLanguageLabelNoScript">
+                  {%- for language in localization.available_languages -%}
+                    <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                      {{ language.endonym_name | capitalize }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+                {% render 'icon-caret' %}
+              </div>
+              <button class="button button--tertiary">{{ 'localization.update_language' | t }}</button>
+            {%- endform -%}
+          </noscript>
+
+          <localization-form>
+            {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+              <div class="no-js-hidden">
+                <h2 class="caption-large text-body" id="FooterLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                <div class="disclosure">
+                  <button type="button" class="disclosure__button localization-form__select localization-selector link link--text caption-large" aria-expanded="false" aria-controls="FooterLanguageList" aria-describedby="FooterLanguageLabel">
+                    {{ localization.language.endonym_name | capitalize }}
+                    {% render 'icon-caret' %}
+                  </button>
+                  <div class="disclosure__list-wrapper" hidden>
+                    <ul id="FooterLanguageList" role="list" class="disclosure__list list-unstyled">
+                      {%- for language in localization.available_languages -%}
+                        <li class="disclosure__item" tabindex="-1">
+                          <a class="link link--text disclosure__link caption-large{% if language.iso_code == localization.language.iso_code %} disclosure__link--active{% endif %} focus-inset" href="#" hreflang="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %} data-value="{{ language.iso_code }}">
+                            {{ language.endonym_name | capitalize }}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                </div>
+                <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+      </div>
+      <div class="footer__column footer__column--info">
+        {%- if section.settings.payment_enable -%}
+<!--               <h3 class="foot-sub-title">Payment Methods</h3> -->
+              <div class="footer-card hidden-sm payment_icon">
+                <ul>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/52d3db0594f3166f0aa9898a71d01a22.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/b07d7f70cd57ff74e7e2827f124bd756.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/fa3c344b2f8c260afd44d7cd6b897936.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/eb12dd9b1552a83e875334e70ee19130.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/77eb6231261cb219e995743069a87160.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/a9db201d4ac401a767e25d22899f220f.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/718feb10b4abb760a7c8c46e9d7e3680.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/d4d98cdfeb86d2c8edd543aec07d498e.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/405c05ddecd540b5cc19f2926ba7722e.svg"></li>
+                  <li><img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/ec7ae4b8d8b17f73ada2f01a46e5f852.svg"></li>
+                  </ul>
+              </div>
+<!--           <div class="footer__payment">
+            <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
+            <ul class="list list-payment" role="list">
+              {%- for type in shop.enabled_payment_types -%}
+                <li class="list-payment__item">
+                  {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div> -->
+        {%- endif -%}
+        <div class="footer__copyright caption">
+          <small class="copyright__content">&copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: routes.root_url }}</small>
+          <small class="copyright__content">  •  All Rights Reserved</small>
+        </div>
+      </div>
+      </div>
+  </div>
+<!--         <div class="footer_credits">
+      <span>Website by <a target="_blank" href="https://friction.studio/" class="js-no-transition">Friction Studio</a></span>
+      </div> -->
+</footer>
+<script src="//cdn.shopify.com/s/files/1/0617/7298/8603/files/optimizer.js?v=1659207041" type="text/javascript"></script>
+{% javascript %}
+  class LocalizationForm extends HTMLElement {
+    constructor() {
+      super();
+      this.elements = {
+        input: this.querySelector('input[name="locale_code"], input[name="country_code"]'),
+        button: this.querySelector('button'),
+        panel: this.querySelector('.disclosure__list-wrapper'),
+      };
+      this.elements.button.addEventListener('click', this.openSelector.bind(this));
+      this.elements.button.addEventListener('focusout', this.closeSelector.bind(this));
+      this.addEventListener('keyup', this.onContainerKeyUp.bind(this));
+
+      this.querySelectorAll('a').forEach(item => item.addEventListener('click', this.onItemClick.bind(this)));
+    }
+
+    hidePanel() {
+      this.elements.button.setAttribute('aria-expanded', 'false');
+      this.elements.panel.setAttribute('hidden', true);
+    }
+
+    onContainerKeyUp(event) {
+      if (event.code.toUpperCase() !== 'ESCAPE') return;
+
+      this.hidePanel();
+      this.elements.button.focus();
+    }
+
+    onItemClick(event) {
+      event.preventDefault();
+      const form = this.querySelector('form');
+      this.elements.input.value = event.currentTarget.dataset.value;
+      if (form) form.submit();
+    }
+
+    openSelector() {
+      this.elements.button.focus();
+      this.elements.panel.toggleAttribute('hidden');
+      this.elements.button.setAttribute('aria-expanded', (this.elements.button.getAttribute('aria-expanded') === 'false').toString());
+    }
+
+    closeSelector(event) {
+      const shouldClose = event.relatedTarget && event.relatedTarget.nodeName === 'BUTTON';
+      if (event.relatedTarget === null || shouldClose) {
+        this.hidePanel();
+      }
+    }
+  }
+
+  customElements.define('localization-form', LocalizationForm);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "t:sections.footer.blocks.link_list.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Quick links",
+          "label": "t:sections.footer.blocks.link_list.settings.heading.label"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "t:sections.footer.blocks.link_list.settings.menu.label",
+          "info": "t:sections.footer.blocks.link_list.settings.menu.info"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.footer.blocks.text.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Heading",
+          "label": "t:sections.footer.blocks.text.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "default": "<p>Share contact information, store details, and brand content with your customers.</p>",
+          "label": "t:sections.footer.blocks.text.settings.subtext.label"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 50,
+          "max": 200,
+          "step": 5,
+          "unit": "px",
+          "label": "Image width",
+          "default": 100
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Image alignment on large screen",
+          "options": [
+            {
+              "value": "",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__1.content",
+      "info": "t:sections.footer.settings.header__1.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.newsletter_enable.label"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "default": "Subscribe to our emails",
+      "label": "t:sections.footer.settings.newsletter_heading.label"
+    },
+    {
+          "type": "text",
+          "id": "cta",
+          "label": "Form button text"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__2.content",
+      "info": "t:sections.footer.settings.header__2.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": false,
+      "label": "t:sections.footer.settings.show_social.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__3.content",
+      "info": "t:sections.footer.settings.header__4.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_country_selector.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__5.content",
+      "info": "t:sections.footer.settings.header__6.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_language_selector.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__7.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.payment_enable.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.footer.settings.margin_top.label",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "text"
+      }
+    ]
+  }
+}
+{% endschema %}

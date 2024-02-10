@@ -1,0 +1,720 @@
+<!-- Start of SearchTap -->
+<!-- <script type="text/javascript" src="https://cdn.searchtap.io/lib/searchtap.min.js"></script> -->
+<script type="text/javascript">
+  window.addEventListener("load", (event) => {
+       var script = document.createElement('script');
+       script.setAttribute('src', 'https://cdn.searchtap.io/lib/searchtap.min.js');
+       script.setAttribute('type', 'text/javascript');
+       document.getElementsByTagName('head')[0].appendChild(script);
+  });
+</script>  
+<script src="{{ 'st.js' | asset_url }}" defer></script>
+
+<script>
+    var st_app_id = 'FLY6NUQCINSILWE5B8GBLIE4';
+    var st_app_read_token = 'V842SAMF51R8PWBUDIWR6WIY';
+    var st_collection_id = 'MUYWD3NWAVQ1SDFP2MDZ5KQ2';
+</script>
+
+
+{% raw %}
+
+<div id="searchModalContainer" class="page-width">
+    <div id="searchModal" class="st-container" v-show="isOpen" v-cloak>
+        <div v-bind:class="{'st-loading': loader }" class="search-output">
+            <div v-show="!loader">
+                <div id="search-content">
+
+                    <!--st filter-->
+
+                    <div class="st-col-md-12">
+                        <div class="st-horizontal-filter hidden-mobile">
+
+                            <div class="filter-column">
+
+                                <div class="filter-col" v-for="f in filters" :key="f.field" v-show="f.selected.length>0 || f.values.length>0 || f.type==='single'">
+
+                                    <div class="st-filter-menu">
+                                        <div class="st-filter-button">
+                                            <div class="st-filter-title">
+                                                {{f.title}}
+                                            </div>
+                                            <div class="st-dropdown-wrapper st-transition">
+                                                <div class="st-dropdown-area" v-if="f.field!=='colour'">
+
+                                                    <div class="st-dynamic-filters">
+
+                                                        <div>
+
+                                                            <div v-if="f.type==='multiple' && f.field!=='colour'">
+                                                                <div class="st-checkbox" v-for="i in f.selected" :key="i">
+                                                                    <label>
+                                                                        <input type="checkbox" :value="i" v-model="f.selected" @change="pushFilter(),filterAnalytics('top', f.title, i)">
+                                                                        <span class="st-item-checkbox">
+
+                                                              </span>
+                                                                        <span class="filter-name">{{i}}</span> <span class="st-count-filter">({{getSelectedCount(i,f.field)}})</span></label>
+                                                                </div>
+
+                                                                <div class="st-checkbox" v-for="i in getNotSelectedFilters(f.field)" :key="i.name">
+                                                                    <label>
+                                                                        <input type="checkbox" :value="i.name" v-model="f.selected" @change="pushFilter(),filterAnalytics('top', f.title, i.name)">
+                                                                        <span class="st-item-checkbox">
+
+                                                              </span>
+                                                                        <span class="filter-name">{{i.name}}</span> <span class="st-count-filter">({{i.count}})</span></label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div v-else-if="f.type==='multiple_price'">
+                                                                <div class="st-checkbox" v-for="i in f.selected" :key="i[0]">
+                                                                    <label v-if="f.field === 'discounted_price'">
+                                                                        <input type="checkbox" :value="[i[0],i[1]]" v-model="f.selected" @change="pushFilter(),filterAnalytics('top', f.title, [i[0],i[1]])">
+                                                                        <span class="st-item-checkbox">
+                                                                      </span>
+                                                                        <span class="filter-name">Rs.  {{numberWithCommas(i[0])}} <span v-if="i[0]===2001">& above</span><span v-else>- Rs. {{numberWithCommas(i[1])}}</span></span> <span class="st-count-filter">({{getSelectedCount(i[0],f.field)}})</span>
+                                                                    </label>
+                                                                    <label v-if="f.field === 'discount'">
+                                                                        <input type="checkbox" :value="[i[0],i[1]]" v-model="f.selected" @change="pushFilter(),filterAnalytics('top', f.title, [i[0],i[1]])">
+                                                                        <span class="st-item-checkbox">
+                                                                      </span>
+                                                                        <span class="filter-name"> Upto {{numberWithCommas(i[1])}}%</span>
+                                                                        <span class="st-count-filter">({{getSelectedCount(i[0],f.field)}})</span>
+                                                                    </label>
+                                                                </div>
+
+                                                                <div class="st-checkbox" v-for="i in getNotSelectedFilters(f.field)" :key="i.min">
+                                                                    <label v-if="f.field === 'discounted_price'">
+                                                                        <input type="checkbox" :value="[i.min,i.max]" v-model="f.selected" @change="pushFilter(),filterAnalytics('top', f.title, [i.min,i.max])">
+                                                                        <span class="st-item-checkbox">
+
+                                                                            </span>
+                                                                        <span class="filter-name">Rs.  {{numberWithCommas(i.min)}} <span v-if="i.min===2001">& above</span><span v-else>- Rs. {{numberWithCommas(i.max)}}</span></span> <span class="st-count-filter">({{i.count}})</span>
+                                                                    </label>
+                                                                    <label v-if="f.field === 'discount'">
+                                                                        <input type="checkbox" :value="[i.min,i.max]" v-model="f.selected" @change="pushFilter(),filterAnalytics('top', f.title, [i.min,i.max])">
+                                                                        <span class="st-item-checkbox">
+
+                                                                            </span>
+                                                                        <span class="filter-name">Upto  {{numberWithCommas(i.max)}}%</span>
+                                                                        <span class="st-count-filter">({{i.count}})</span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div v-else-if="f.type==='single'">
+                                                                <div class="st-checkbox" v-for="i in f.values" :key="i">
+                                                                    <label>
+                                                                        <input type="checkbox" :value="i" @change="pushFilter()" v-model="f.selected">
+                                                                        <span class="st-item-checkbox">
+
+                                                              </span>
+                                                                        <span class="filter-name">Exclude Out Of Stock</span> </label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="st-dropdown-area st-color" v-if="f.field==='colour'">
+
+                                                    <div class="st-dynamic-filters">
+
+                                                        <div>
+
+                                                            <div>
+                                                                <div class="st-checkbox" v-for="i in f.selected" :key="i">
+                                                                    <label>
+                                                                        <input type="checkbox" :value="i" v-model="f.selected" @change="pushFilter(),filterAnalytics('top', f.title, i)">
+                                                                        <span class="st-item-checkbox">
+                                                                        <span class="st-color-box" :style="{ 'background-color':getColor(i) }"></span>
+
+                                                              </span>
+                                                                        <span class="filter-name">{{i}}</span> <span class="st-count-filter">({{getSelectedCount(i,f.field)}})</span></label>
+                                                                </div>
+
+                                                                <div class="st-checkbox" v-for="i in getNotSelectedFilters(f.field)" :key="i.name">
+                                                                    <label>
+                                                                        <input type="checkbox" :value="i.name" v-model="f.selected" @change="pushFilter(),filterAnalytics('top', f.title, i.name)">
+                                                                        <span class="st-item-checkbox">
+                                                                        <span class="st-color-box" :style="{ 'background-color':getColor(i.name) }"></span>
+
+                                                              </span>
+                                                                        <span class="filter-name">{{i.name}}</span> <span class="st-count-filter">({{i.count}})</span></label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="filter-col st-flex-right">
+
+                                    <div class="st-filter-menu">
+                                        <div class="st-filter-button">
+                                            <div class="st-filter-title" style="min-width:140px;  margin-right: 0px !important;">
+                                                {{sortLabel}}
+                                            </div>
+                                            <div class="st-dropdown-wrapper st-transition" style="min-width: 140px !important; margin-left: 0px !important;">
+                                                <div class="st-dropdown-area ">
+
+                                                    <div class="st-dynamic-filters">
+
+                                                        <div>
+
+                                                            <div>
+                                                                <div class="st-checkbox" v-for="s in sorts" :class="{'activeColor':s.label===sortLabel}" @click="sorting(s.label)">
+                                                                    <label>
+
+                                                                        <span class="sort-filter-name" :value="s.label">{{s.label}}</span></label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--tags-->
+
+                            <div class="filter-tag-column st-width">
+
+                                <div class="st-filter-tags">
+
+                                    <div class="st-filter-inner">
+
+                                        <div class="tag-item" v-for="i in selectedFilters">
+
+                                            <div class="tag-close" @click="clearSingleFilter(i,getField(i))">✕</div>
+                                            <div class="tag-content" v-if="getType(i)==='multiple' || getType(i)==='single'">{{i}}</div>
+                                            <div class="tag-content" v-else-if="getField(i) === 'discounted_price'">{{currencySymbol}}  {{numberWithCommas(i[0])}} <span v-if="i[0]===2001">& above</span><span v-else>- {{currencySymbol}} {{numberWithCommas(i[1])}}</span></div>
+                                            <div class="tag-content" v-else-if="getField(i) === 'discount'">Upto {{numberWithCommas(i[1])}}%</div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tag-item st-last-clear-tag" style="margin-right: 0px !important;" @click="clearFilter()" v-show="filterCount>0">
+
+                                        <div class="tag-content" style="max-width: 100% !important; color: #fff !important;">Clear All</div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!--end tags-->
+
+                        </div>
+                    </div>
+
+                    <!--end st filter-->
+
+                    <div class="st-col-md-12 col-sm-12 col-xs-12">
+                        <div class="st-row">
+                            <div class="st-col-md-12">
+                                <div class="st-toolbar">
+                                    <div class="resut-summary-t">
+                                        <div class="st-result-inner">
+                                            <div class="st-col-md-6 pl0"><span class="hidden-mobile">Showing</span> <span class="st-pr2">{{ totalHits }}</span> <span class="hidden-desktop"> result<span class="result-mob"  style="text-transform: lowercase" v-show="totalHits>1">s</span></span> <span class="hidden-mobile"> Result<span class="result-mob" v-show="totalHits>1">s</span> for </span> <span class="txt-red hidden-mobile">"{{ truncate(query,50) }}"</span></div>
+                                            <div class="st-col-md-6 pr0"><span class="st-brand-outer"><a href="https://www.searchtap.io/?utm_source=fabcurate&amp;utm_medium=website" target="_blank"><div class="st-brand-txt">Powered by SearchTap</div> <div class="st-brand"></div></a></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="st-product">
+
+                        <div class="st-col-md-12">
+
+                            <div class="st-row">
+
+                                <div class="st-col-md-4 st-products" v-for="item in results" :key="item.id">
+
+                                    <div class="st-card product-itemfabric">
+
+                                        <div class="st-product-element-top">
+
+                                            <div class="st-img-container">
+
+
+                                                <a :href="getUrl(item.handle)" class="st-loop-product">
+                                                    <img v-if="item.images[0]!==undefined" :src="imageModifier(item.images[0].src)" class="img_thumbnail" />
+                                                    <img v-else src="//cdn.shopify.com/s/assets/no-image-2048-5e88c1b20e087fb7bbe9a3771824e743c244f437e4f8ba93bbf7b11b53f7824c_300x.gif" class="img_thumbnail" />
+
+                                                </a>
+
+
+
+                                                <div class="st-card-hover" v-if="!isDeviceMobile()">
+                                                    <a :href="getUrl(item.handle)">
+                                                        <img v-if="item.images[1]!==undefined"  :src="imageModifier(item.images[1].src)"  class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail">
+                                                        <img v-else src="//cdn.shopify.com/s/assets/no-image-2048-5e88c1b20e087fb7bbe9a3771824e743c244f437e4f8ba93bbf7b11b53f7824c_300x.gif" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
+                                                    </a>
+                                                </div>
+
+                                                <div class="product-label" >
+                                                    <span class="label sale-label" v-if="item.discount>0">
+                                                        -{{item.discount}}% off
+                                                    </span>
+                                                    <br>
+                                                    <strong class="label sold-out-label" v-if="isActive===0" data-translate="products.product.sold_out">
+                                                        Sold out
+                                                    </strong>
+                                                    <br>
+                                                </div>
+
+
+                                            </div>
+
+
+                                           
+
+                                        </div>
+
+
+                                        <div class="st-bottom-card">
+
+                                            <div class="st-title-box">
+
+<!--                                                 <h3 class="st-product-title" v-if="isDeviceMobile()"><a :href="getUrl(item.handle)">
+                                                    {{ truncate(item.title,35) }}
+                                                </a></h3> -->
+                                                <h3 class="st-product-title"><a :href="getUrl(item.handle)">
+                                                    {{ item.title }}
+                                                </a>
+                                                </h3>
+                                                <div class="card--stock" v-if="item.isActive">
+                                                  <span>•</span>  In Stock
+                                                </div>
+
+                                            </div>
+
+                                            <div class="st-wrap-price">
+                                                <div class="st-wrapp-swap">
+                                                    <div class="st-swap-elements">
+
+
+
+                                                        <!--                                                     <div class="st-price">
+                                                                                    <span class="st-wcpbc-price">
+
+                                                                                              <del><span class="price-amount amount" v-show="item.discount>0">
+                                                                                      {{currencySymbol}} {{numberWithCommas((item.price).toFixed(2))}}</span>
+                                                                                                    </del>
+
+                                                                                                    <ins>
+                                                                                                      <span class="woocommerce-Price-amount amount" v-if="item.tags.includes('fabric') || item.tags.includes('curate')">
+                                                                              {{currencySymbol}} {{numberWithCommas((item.discounted_price * 2).toFixed(2))}} /metre</span>
+
+                                                                                                      <span class="woocommerce-Price-amount amount" v-else>
+                                                                              {{currencySymbol}} {{numberWithCommas((item.discounted_price).toFixed(2))}}</span>
+                                                                                                    </ins>
+
+
+
+                                                                                                    </span>
+                                                                                                            </div> -->
+
+
+                                                        <div class="st-price">
+    														<span class="st-wcpbc-price">
+                                                              <ins>
+                                                              <span class="woocommerce-Price-amount amount" v-if="item.tags.includes('fabric') && !item.tags.includes('curate')">
+                      											{{currencySymbol}} {{numberWithCommas((item.discounted_price * 2).toFixed(0))}} /meter</span>
+                                                                <span class="woocommerce-Price-amount amount" v-else-if="!item.tags.includes('curate') && item.discount===0">
+                    											{{currencySymbol}} {{numberWithCommas((item.discounted_price).toFixed(0))}} /unit</span>
+                                                                <span class="woocommerce-Price-amount amount money" style="color: #b20000; font-weight: 400" v-else-if="!item.tags.includes('curate') && item.discount>0">
+                    											{{currencySymbol}} {{numberWithCommas((item.discounted_price).toFixed(0))}}
+                                                                <span v-show="(item.tags.includes('pre-cut') || item.tags.includes('pre cut')) && !item.tags.includes('curate')">/unit</span>
+                                                              </span>
+                                                              </ins>
+        													  <del>
+                                                                <span class="price-amount amount" v-if="item.discount>0 && !item.tags.includes('curate') && item.tags.includes('fabric')">
+      															{{currencySymbol}} {{numberWithCommas((item.price * 2).toFixed(0))}}
+                                                                </span>
+                                                                <span class="price-amount amount" v-else-if="item.discount>0 && !item.tags.includes('curate')">
+      															{{currencySymbol}} {{numberWithCommas((item.price).toFixed(0))}}
+                                                                </span>
+                                                              </del>
+                                                            </span>
+                                                            <div class="card__badge_custom badge-is-div">
+                                                              <span class="badge-is badge--bottom-left color-accent-2" v-if="item.discount>0">
+                                                                {{item.discount}}% off
+                                                              </span>
+                                                            </div>
+                                                        </div>
+<div class="product-form__buttons hidden-mobile">
+                    <button type="submit" name="add" class="product-form__submit button button--full-width button--secondary" aria-haspopup="dialog">
+                        <a :href="getUrl(item.handle)"><svg xmlns="http://www.w3.org/2000/svg" width="31" height="30" viewBox="0 0 31 30" fill="none">
+<path d="M23.5 21.5625H9.02673C8.80718 21.5625 8.59459 21.4854 8.42603 21.3448C8.25747 21.2041 8.14363 21.0087 8.10435 20.7927L4.97519 3.5823C4.93592 3.36628 4.82207 3.17091 4.65351 3.03023C4.48495 2.88956 4.27236 2.8125 4.05281 2.8125H1.9375" stroke="#B8B7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M9.4375 26.25C10.7319 26.25 11.7812 25.2007 11.7812 23.9062C11.7812 22.6118 10.7319 21.5625 9.4375 21.5625C8.14308 21.5625 7.09375 22.6118 7.09375 23.9062C7.09375 25.2007 8.14308 26.25 9.4375 26.25Z" stroke="#B8B7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M23.5 26.25C24.7944 26.25 25.8438 25.2007 25.8438 23.9062C25.8438 22.6118 24.7944 21.5625 23.5 21.5625C22.2056 21.5625 21.1562 22.6118 21.1562 23.9062C21.1562 25.2007 22.2056 26.25 23.5 26.25Z" stroke="#B8B7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M5.6875 7.5H26.1267C26.264 7.5 26.3996 7.53016 26.524 7.58836C26.6484 7.64656 26.7585 7.73137 26.8464 7.8368C26.9344 7.94222 26.9982 8.06569 27.0332 8.19847C27.0682 8.33125 27.0736 8.4701 27.0491 8.60521L25.515 17.0427C25.4757 17.2587 25.3619 17.4541 25.1933 17.5948C25.0247 17.7354 24.8121 17.8125 24.5926 17.8125H7.5625" stroke="#B8B7B7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</a>
+                        <div class="loading-overlay__spinner hidden">
+                          <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                          </svg>
+                        </div>
+                    </button>
+  </div>
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          
+                                          <div style="display:none;min-height:20px">
+                                          <span class="proquantity" v-if="item.tags.includes('fabric') && !item.tags.includes('curate')">{{((item.variants[0].inventory_quantity)/2).toFixed(1)}} meters in stock</span>
+                                                <span class="proquantity" v-else-if="!item.tags.includes('curate')">{{(item.variants[0].inventory_quantity).toFixed(1)}} unit<span v-show="item.variants[0].inventory_quantity>1">s</span> in stock</span>
+                                          </div>
+
+                                        </div>
+
+                                      
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div id="noResults" class="st-results-end" v-show="resultsEnd">
+                        No more results
+                    </div>
+
+                    <div class="filter-bar hidden-desktop">
+
+
+                        <div class="st-overlay-active" v-show="showSort" @click="showSort=false">
+                            <div class="st-sorting-wrapper">
+                                <div class="st-sorting-inner">
+                                    <ul class="list">
+                                        <li class="sortby">
+                                            <div class="st-sort-cross" @click="showSort=false">
+                                                <svg role="presentation" viewBox="0 0 16 14" class="Icon Icon--close"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg>
+                                            </div>
+                                            Sort by
+                                        </li>
+                                        <li v-for="s in sorts">
+                                            <div class="ripple-container">
+                                                <button @click="sorting(s.label)" :value="s.label" :class="{'activeColor':s.label===sortLabel}"><span class="sortByValues"> {{s.label}}</span></button>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="sortFilter" class="sortFilterCon">
+                            <div class="sort_h" @click="showSort=true">
+                                <span class="tabIcon sortIcon"></span>
+                                <span class="filter-applied-ellip" v-show="sortLabel!=='Relevance'"></span>
+                                <span class="disInBlock">Sort by</span>
+                            </div>
+
+                            <div class="filter_h" @click="showFilter=true">
+                                <span class="tabIcon filterIcon"></span>
+                                <span class="filter-applied-ellip" v-show="filterCount>0"></span>
+                                <span class="disInBlock">Filter by</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!--                <div id="st-back-top" @click="topFunction()"> -->
+                    <!--                    <a href="#" rel="tooltip" title="Top"></a> -->
+                    <!--                 </div> -->
+
+                    <div id="searchFilterMobile" class="hidden-desktop" v-show="showFilter">
+                        <div id="mobile-filter">
+                            <div class="mobile-filter-popup">
+                                <div class="filter-list">
+                                    <div class="filter-header">
+                                        <div class="st-row" style="width: 100%;">
+                                            <div class="st-col-md-12">
+                                                <div>
+                                                    <button type="button" aria-label="Close" class="close" @click="showFilter=false"></button>
+                                                    <span class="filter-text pull-left">Filter by</span>
+                                                </div>
+
+                                                <div class="apply-all"  @click="showFilter=false,topFunction()"><a class="apply-btn">Apply</a></div>
+
+                                                <div class="clear-all" v-show="filterCount>0" @click="clearFilter()">Reset all</div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="st-row">
+                                        <div class="filter-body">
+                                            <div class="mobileFilters" v-for="f in filters" :key=f.field v-show="f.values.length>0 || f.selected.length>0 || f.type==='single'">
+                                                <div class="panel-heading" @click="f.isOpen=!f.isOpen">
+                                                    <h4 class="panel-title"><span class="filter-clear" @click.stop="clearFilter(f.field)" v-show="f.selected.length>0">Clear</span>
+                                                        <i aria-hidden="true" :class="[!f.isOpen ? 'fa-angle-up' : 'fa-angle-down','indicator','fa']"></i>
+                                                        <span class="panel-title-heading">{{f.title}}</span></h4></div>
+                                                <div>
+                                                    <ul class="list-group non-static-filters" v-if="f.field!=='colour'">
+
+                                                        <div v-show="f.isOpen">
+                                                            <div v-if="f.type==='multiple'">
+
+                                                                <li class="list-group-item selected-list" v-for="i in f.selected" :key="i">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" :value="i" v-model="f.selected" @change="pushFilter(),filterAnalytics('left', f.title, i)">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                                                            <span class="filter-label">{{i}}</span>
+                                                                            <span class="number_of_product">({{getSelectedCount(i,f.field)}})</span>
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+
+                                                                <li class="list-group-item selected-list" v-for="i in getNotSelectedFilters(f.field)" :key="i.name">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" :value="i.name" v-model="f.selected" @change="pushFilter(),filterAnalytics('left', f.title, i.name),topFunction()">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                                                            <span class="filter-label">{{i.name}}</span>
+                                                                            <span class="number_of_product">({{i.count}})</span>
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+
+
+                                                            </div>
+                                                            <div v-else-if="f.type==='multiple_price'">
+                                                                <li class="list-group-item selected-list"  v-for="i in f.selected" :key="i[0]" >
+                                                                    <div class="checkbox">
+                                                                        <label v-if="f.field === 'discounted_price'">
+                                                                            <input type="checkbox" :value="[i[0],i[1]]" v-model="f.selected" @change="pushFilter(),filterAnalytics('left', f.title, [i[0],i[1]]),topFunction()">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                                                            <span class="filter-label">Rs. {{numberWithCommas(i[0])}} <span v-if="i[0]===2001">& above</span><span v-else>- Rs. {{numberWithCommas(i[1])}}</span></span>
+                                                                            <span class="number_of_product">({{getSelectedCount(i[0],f.field)}})</span>
+                                                                        </label>
+                                                                        <label v-if="f.field === 'discount'">
+                                                                            <input type="checkbox" :value="[i[0],i[1]]" v-model="f.selected" @change="pushFilter(),filterAnalytics('left', f.title, [i[0],i[1]]),topFunction()">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                                                            <span class="filter-label"> Upto {{numberWithCommas(i[1])}}%
+                                                                                </span>
+                                                                            <span class="number_of_product">({{getSelectedCount(i[0],f.field)}})</span>
+                                                                        </label>
+
+                                                                    </div>
+                                                                </li>
+
+                                                                <li class="list-group-item selected-list"  v-for="i in getNotSelectedFilters(f.field)" :key="i.min" >
+                                                                    <div class="checkbox">
+                                                                        <label v-if="f.field === 'discounted_price'">
+                                                                            <input type="checkbox" :value="[i.min,i.max]" v-model="f.selected" @change="pushFilter(),filterAnalytics('left', f.title, [i.min,i.max]),topFunction()">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                                                            <span class="filter-label">Rs. {{numberWithCommas(i.min)}} <span v-if="i.min===2001">& above</span><span v-else>- Rs. {{numberWithCommas(i.max)}}</span></span>
+                                                                            <span class="number_of_product">({{i.count}})</span>
+                                                                        </label>
+                                                                        <label v-if="f.field === 'discount'">
+                                                                            <input type="checkbox" :value="[i.min,i.max]" v-model="f.selected" @change="pushFilter(),filterAnalytics('left', f.title, [i.min,i.max]),topFunction()">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                                                            <span class="filter-label">Upto {{numberWithCommas(i.max)}}%
+                                                                                </span>
+                                                                            <span class="number_of_product">({{i.count}})</span>
+                                                                        </label>
+
+                                                                    </div>
+                                                                </li>
+                                                            </div>
+
+                                                            <div v-else >
+                                                                <li class="list-group-item selected-list" v-for="i in f.values" :key="i">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" :value="i" @change="pushFilter()" v-model="f.selected">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+
+                                                                            <span class="filter-label">Exclude Out of Stock</span> </label>
+                                                                    </div>
+                                                                </li>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </ul>
+
+                                                    <ul class="list-group non-static-filters st-color" v-if="f.field==='colour'">
+
+                                                        <div v-show="f.isOpen">
+                                                            <div>
+
+                                                                <li class="list-group-item selected-list" v-for="i in f.selected" :key="i">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" :value="i" v-model="f.selected" @change="pushFilter(),filterAnalytics('left', f.title, i)">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i>
+                                                                        <span class="st-color-box" :style="{ 'background-color':getColor(i) }"></span>
+                                                                        </span>
+                                                                            <span class="filter-label">{{i}}</span>
+                                                                            <span class="number_of_product">({{getSelectedCount(i,f.field)}})</span>
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+
+                                                                <li class="list-group-item selected-list" v-for="i in getNotSelectedFilters(f.field)" :key="i.name">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" :value="i.name" v-model="f.selected" @change="pushFilter(),filterAnalytics('left', f.title, i.name),topFunction()">
+                                                                            <span class="cr"><i class="cr-icon fa fa-check"></i>
+                                                                            <span class="st-color-box" :style="{ 'background-color':getColor(i.name) }"></span>
+                                                                        </span>
+                                                                            <span class="filter-label">{{i.name}}</span>
+                                                                            <span class="number_of_product">({{i.count}})</span>
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="overlay" v-show="noResult">
+                    <div class="container">
+                        <h2 class="page-heading">No Results found <span style="">for '{{ truncate(query,query.length) }}'</span></h2>
+                        <div class="search-pform">
+                            <p>Try searching some other keywords <span>or apply different set of filters</span></p>
+                            <p>Try other items in our store</p>
+                        </div>
+                    </div>
+
+
+                    <div id="shopify-section-1593172954200" class="shopify-section product-banner-block-sections">
+                        <div class="product-banner-block" id="section-1593172954200">
+                            <div class="container">
+                                <div class="full-banner product-banner">
+                                    <div class="row">
+                                        <div class="col-md-3 banner-item text-left" id="banner-item-1594211571301">
+                                            <div class="img-box">
+                                                <a href="/collections/ajrakh">
+                                                    <img data-src="//cdn.shopify.com/s/files/1/0418/1537/6032/files/1_9cb3e14e-1f72-43b6-88b1-cb8670c6d100.jpg?v=1593172765" src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/1_9cb3e14e-1f72-43b6-88b1-cb8670c6d100.jpg?v=1593172765" alt="Fabcurate" itemprop="logo" class="lazyautosizes lazyloaded" data-sizes="auto" sizes="255px">
+                                                </a>
+                                            </div>
+                                            <div class="img-box">
+                                                <a href="/collections/ikat-designs">
+                                                    <img data-src="//cdn.shopify.com/s/files/1/0418/1537/6032/files/5.jpg?v=1593172973" src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/5.jpg?v=1593172973" alt="Fabcurate" itemprop="logo" class="lazyautosizes lazyloaded" data-sizes="auto" sizes="255px">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 banner-item text-left" id="banner-item-1594211621441">
+                                            <div class="img-box">
+                                                <a href="/collections/banarasi">
+                                                    <img data-src="//cdn.shopify.com/s/files/1/0418/1537/6032/files/2_e83382b9-49fb-4446-b403-3f5eca4271be.jpg?v=1593172779" src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/2_e83382b9-49fb-4446-b403-3f5eca4271be.jpg?v=1593172779" alt="Fabcurate" itemprop="logo" class="lazyautosizes lazyloaded" data-sizes="auto" sizes="255px">
+                                                </a>
+                                            </div>
+                                            <div class="img-box">
+                                                <a href="/collections/kalamkari">
+                                                    <img data-src="//cdn.shopify.com/s/files/1/0418/1537/6032/files/6.jpg?v=1593172989" src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/6.jpg?v=1593172989" alt="Fabcurate" itemprop="logo" class="lazyautosizes lazyloaded" data-sizes="auto" sizes="255px">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 banner-item text-left" id="banner-item-1594211687934">
+                                            <div class="img-box">
+                                                <a href="/collections/digital-print">
+                                                    <img data-src="//cdn.shopify.com/s/files/1/0418/1537/6032/files/3_ff3c5f42-421d-434c-a078-4b4fd661eb12.jpg?v=1593172791" src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/3_ff3c5f42-421d-434c-a078-4b4fd661eb12.jpg?v=1593172791" alt="Fabcurate" itemprop="logo" class="lazyautosizes lazyloaded" data-sizes="auto" sizes="255px">
+                                                </a>
+                                            </div>
+                                            <div class="img-box">
+                                                <a href="/collections/hand-block">
+                                                    <img data-src="//cdn.shopify.com/s/files/1/0418/1537/6032/files/8.jpg?v=1593173026" src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/8.jpg?v=1593173026" alt="Fabcurate" itemprop="logo" class="lazyautosizes lazyloaded" data-sizes="auto" sizes="255px">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 banner-item text-left" id="banner-item-1594211718169">
+                                            <div class="img-box">
+                                                <a href="/collections/embroidered-fabric">
+                                                    <img data-src="//cdn.shopify.com/s/files/1/0418/1537/6032/files/4_fff4ed63-4ce8-4f7a-a93e-ff66a99872fc.jpg?v=1593172802" src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/4_fff4ed63-4ce8-4f7a-a93e-ff66a99872fc.jpg?v=1593172802" alt="Fabcurate" itemprop="logo" class="lazyautosizes lazyloaded" data-sizes="auto" sizes="255px">
+                                                </a>
+                                            </div>
+                                            <div class="img-box">
+                                                <a href="/collections/screen-print">
+                                                    <img data-src="//cdn.shopify.com/s/files/1/0418/1537/6032/files/7.jpg?v=1593173014" src="https://cdn.shopify.com/s/files/1/0418/1537/6032/files/7.jpg?v=1593173014" alt="Fabcurate" itemprop="logo" class="lazyautosizes lazyloaded" data-sizes="auto" sizes="255px">
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            #section-1593172954200{
+                                display: inline-block;
+                                width: 100%;
+                                margin-top: 0px;
+                                margin-bottom: 0px;
+                            }
+                        </style>
+                    </div>
+
+                </div>
+
+                <div id="overlay1" v-show="errorEncountered && !loader">
+                    <div class="container">
+                        <h2>Oops!!! Something Wrong Went</h2>
+                        <p>Please, try <a href="" onclick="location.reload()" style="color: #8a6d3b;">reloading</a> page or go back to <a href="https://fabcurate.com/" style="color: #8a6d3b;">Home</a> page</p>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endraw %}
+
+<!-- End of SearchTap -->
+
+{% schema %}
+{
+"name": "searchtap",
+"settings": []
+}
+{% endschema %}
+
